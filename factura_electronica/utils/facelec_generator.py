@@ -114,7 +114,7 @@ def construir_xml(serie_original_factura, nombre_del_cliente, prefijo_serie, ser
     # Obtiene datos de los campos de la tabla 'Customer'
     try:
         nit_cliente = frappe.db.get_values('Customer', filters={'name': nombre_del_cliente},
-                                            fieldname='nit_face_customer')
+                                            fieldname='tax_id')
     except:
         frappe.msgprint(_('Error al obtener nit del cliente {}'.format(nombre_del_cliente)))
 

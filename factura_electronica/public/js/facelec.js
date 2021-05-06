@@ -64,13 +64,8 @@ frappe.ui.form.on("Item", {
 // Validador NIT para customer
 // Descripcion de Nombre legal
 frappe.ui.form.on("Customer", {
-    nit_face_customer: function (frm) {
-        valNit(frm.doc.nit_face_customer, frm.doc.name, frm);
-        frm.set_value('tax_id', frm.doc.nit_face_customer);
-    },
     tax_id: function (frm) {
         valNit(frm.doc.tax_id, frm.doc.name, frm);
-        frm.set_value('nit_face_customer', frm.doc.tax_id);
     },
     refresh: function (frm) {
         var cust_name_desc = __("Legal Name, for tax, government or contract use. For Example: Apple, Inc. Amazon.com, Inc., The Home Depot, Inc.");

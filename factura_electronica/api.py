@@ -159,11 +159,20 @@ def generar_tabla_html_factura_compra(tabla):
         )
     )
 
+# Funcion retorna resultados
+def send_response(status, detalle, uuid, mensaje, errores=1):
+    return {
+        "status": status,
+        "cantidad_errores": errores,
+        "detalle_errores_facelec": detalle,
+        "uuid": uuid,
+        "descripcion": mensaje
+    }
 
 # FUNCION ESPECIAL PARA API - FEL
 def facelec_api(serie_factura, nombre_cliente, pre_se):
     '''Verifica que todos los datos esten correctos para realizar una
-       peticion a INFILE y generar la factura electronica
+       peticion y generar la factura electronica
 
        Parametros
        ----------
@@ -187,119 +196,27 @@ def facelec_api(serie_factura, nombre_cliente, pre_se):
                                                     filters={'numero_dte': serie_original_factura},
                                                     fieldname=['serie_factura_original', 'cae', 'numero_dte'],
                                                     as_dict=1)
-            # return True, '''
-            # <b>AVISO:</b> La Factura ya fue generada Anteriormente <b>{}</b>
-            # '''.format(str(factura_electronica[0]['numero_dte']))
-            return {
-                "status": "OK",
-                "cantidad_errores": 0,
-                "detalle_errores_facelec": [],
-                "uuid": str(factura_electronica[0]['numero_dte']),
-                "descripcion": "La factura electronica ya fue generada anteriormente"
-            }
+
+            mensaje = "La factura electronica ya fue generada anteriormente"
+            return send_response("OK", [], str(factura_electronica[0]['numero_dte']), mensaje)
 
         elif frappe.db.exists('Envio FEL', {'serie_para_factura': serie_original_factura}):
             factura_electronica = frappe.db.get_values('Envio FEL',
                                                     filters={'serie_para_factura': serie_original_factura},
                                                     fieldname=['serie_para_factura'],
                                                     as_dict=1)
-            return {
-                "status": "OK",
-                "cantidad_errores": 0,
-                "detalle_errores_facelec": [],
-                "uuid": "",
-                "descripcion": "La Factura ya fue generada Anteriormente con serie: "+str(factura_electronica[0]['serie_para_factura'])
-            }
+            
+            mensaje = "La Factura ya fue generada Anteriormente con serie: "+str(factura_electronica[0]['serie_para_factura'])
+            return send_response("OK", [], "", mensaje)
+
             # return True, "La Factura ya fue generada Anteriormente,"+str(factura_electronica[0]['serie_para_factura'])
 
         else:  # Si no existe se creara
             nombre_config_validada = str(validar_config[1])
             # Verificacion regimen GFACE
             if validar_config[2] == 'GFACE':
-                return {
-                    "status": "ERROR",
-                    "cantidad_errores": 1,
-                    "detalle_errores_facelec": ["GFACE no habilitado para API"],
-                    "uuid": ""
-                }
-                # VERIFICACION EXISTENCIA SERIES CONFIGURADAS, EN CONFIGURACION FACTURA ELECTRONICA
-                # if frappe.db.exists('Configuracion Series', {'parent': nombre_config_validada, 'serie': prefijo_serie}):
-                #     series_configuradas = frappe.db.get_values('Configuracion Series',
-                #                                                 filters={'parent': nombre_config_validada, 'serie': prefijo_serie},
-                #                                                 fieldname=['fecha_resolucion', 'estado_documento',
-                #                                                             'tipo_documento', 'serie', 'secuencia_infile',
-                #                                                             'numero_resolucion', 'codigo_sat'], as_dict=1)
-
-
-                #     url_configurada = frappe.db.get_values('Configuracion Factura Electronica',
-                #                                         filters={'name': nombre_config_validada},
-                #                                         fieldname=['url_listener', 'descargar_pdf_factura_electronica',
-                #                                                 'url_descarga_pdf'], as_dict=1)
-
-                #     # Verificacion regimen GFACE
-                #     # CONTRUCCION XML Y PETICION A WEBSERVICE
-                #     try:
-                #         xml_factura = construir_xml(serie_original_factura, nombre_del_cliente, prefijo_serie, series_configuradas, nombre_config_validada)
-                #     except:
-                #         return 'Error crear xml para factura electronica: {}'.format(frappe.get_traceback())
-                #     else:
-                #         url = str(url_configurada[0]['url_listener'])
-                #         tiempo_enviado = datetime.now()
-                #         respuesta_infile = peticion_factura_electronica(xml_factura, url)
-                #         # Usar para debug
-                #         # with open('reci.xml', 'w') as f:
-                #         #     f.write(str(respuesta_infile))
-
-                #     # VALIDACION RESPUESTA
-                #     try:
-                #         # xmltodic parsea la respuesta por parte de INFILE
-                #         documento_descripcion = xmltodict.parse(respuesta_infile)
-                #         # En la descripcion se encuentra el mensaje, si el documento electronico se realizo con exito
-                #         descripciones = (documento_descripcion['S:Envelope']['S:Body']['ns2:registrarDteResponse']['return']['descripcion'])
-                #     except:
-                #         return '''Error: INFILE no pudo recibir los datos: {0} \n {1}'''.format(str(respuesta_infile), frappe.get_traceback())
-                #     else:
-                #         # La funcion errores se encarga de verificar si existen errores o si la
-                #         # generacion de factura electronica fue exitosa
-                #         errores_diccionario = errores(descripciones)
-
-                #         if (len(errores_diccionario) > 0):
-                #             try:
-                #                 # Si el mensaje indica que la factura electronica se genero con exito se procede
-                #                 # a guardar la respuesta de INFILE en la DB
-                #                 if ((str(errores_diccionario['Mensaje']).lower()) == 'dte generado con exito'):
-
-                #                     cae_fac_electronica = guardar(respuesta_infile, serie_original_factura, tiempo_enviado)
-                #                     # frappe.msgprint(_('FACTURA GENERADA CON EXITO'))
-                #                     # el archivo rexpuest.xml se encuentra en la ruta, /home/frappe/frappe-bench/sites
-
-                #                     # USAR PARA DEBUG
-                #                     # with open('respuesta_infile.xml', 'w') as recibidoxml:
-                #                     #     recibidoxml.write(str(respuesta_infile))
-                #                     #     recibidoxml.close()
-
-                #                     # es-GT:  Esta funcion es la nueva funcion para actualizar todas las tablas en las cuales puedan aparecer.
-                #                     numero_dte_correcto = actualizartb(serie_original_factura)
-                #                     # Funcion para descargar y guardar pdf factura electronica
-                #                     descarga_pdf = guardar_pdf_servidor(numero_dte_correcto, cae_fac_electronica)
-
-                #                     # Este dato sera capturado por Js actualizando la url
-                #                     return numero_dte_correcto
-                #             except:
-                #                 for llave in errores_diccionario:
-                #                     return '''
-                #                     <span class="label label-warning" style="font-size: 14px">{}</span>
-                #                     '''.format(str(llave)) + ' = ' + str(errores_diccionario[llave])
-
-                #                 # frappe.msgprint(_('NO GENERADA: {}'.format(frappe.get_traceback())))
-
-
-                # else:
-                #     return '''La serie utilizada en esta factura no esta configurada para Facturas Electronicas.
-                #                         Por favor configura la serie <b>{0}</b> en
-                #                         <a href='#List/Configuracion Factura Electronica'><b>Configuracion Factura Electronica</b></a>
-                #                         e intenta de nuevo.
-                #                     '''.format(prefijo_serie)
+                mensaje = "GFACE no habilitado para API"
+                return send_response("ERROR", ["GFACE no habilitado para API"], "", mensaje)
 
             # Verificacion regimen FEL
             if validar_config[2] == 'FEL':
@@ -317,62 +234,39 @@ def facelec_api(serie_factura, nombre_cliente, pre_se):
                         factura_electronica = FacturaElectronicaFEL(serie_original_factura, nombre_del_cliente, nombre_config_validada, series_configuradas_fel)
                         est = factura_electronica.generar_facelec()
                         if est['status'] != 'OK':
-                            return {
-                                "status": "ERROR",
-                                "cantidad_errores": len(est['detalle_errores_facelec']),
-                                "detalle_errores_facelec": est['detalle_errores_facelec'],
-                                "uuid": ""
-                            }
+                            mensaje = "Ocurrio uno o varios errores al generar el documento FEL"
+                            errores = len(est['detalle_errores_facelec'])
+                            detalle = est['detalle_errores_facelec']
+                            
+                            return send_response("ERROR", detalle, "", mensaje, errores)
                         else:
-                            return {
-                                "status": "OK",
-                                "cantidad_errores": 0,
-                                "detalle_errores_facelec": [],
-                                "uuid": est['uuid']
-                            }
-                    except:
-                        # return False, 'No se pudo generar la factura electronica: '+(est)
-                        return {
-                            "status": "ERROR",
-                            "cantidad_errores": 1,
-                            "detalle_errores_facelec": [est],
-                            "uuid": ""
-                        }
+                            mensaje = "Factura electrónica"
+                            return send_response("OK", [], est['uuid'], mensaje, 0)
+                    except Exception as e:
+                        
+                        mensaje = "Error interno, notificar"
+                        return send_response("ERROR", [est], "", mensaje)
                 else:
-                    # return False, '''La serie utilizada en esta factura no esta configurada para Facturas Electronicas.
-                    #         Por favor configura la serie <b>{0}</b> en
-                    #         <a href='#List/Configuracion Factura Electronica'><b>Configuracion Factura Electronica</b></a>
-                    #         e intenta de nuevo.
-                    #     '''.format(prefijo_serie)
-                    return {
-                        "status": "ERROR",
-                        "cantidad_errores": 1,
-                        "detalle_errores_facelec": ['''La serie utilizada en esta factura no esta configurada para Facturas Electronicas.
-                            Por favor configura la serie <b>{0}</b> en
-                            <a href='#List/Configuracion Factura Electronica'><b>Configuracion Factura Electronica</b></a>
-                            e intenta de nuevo.
-                        '''.format(prefijo_serie)],
-                        "uuid": ""
-                    }
+                    mensaje = "Error de configuración"
+                    detalle = ['''La serie utilizada en esta factura no esta configurada para Facturas Electronicas.
+                        Por favor configura la serie <b>{0}</b> en
+                        <a href='#List/Configuracion Factura Electronica'><b>Configuracion Factura Electronica</b></a>
+                        e intenta de nuevo.
+                        '''.format(prefijo_serie)]
+                    return send_response("ERROR", detalle, "", mensaje)
 
     elif validar_config[0] == 2:
-        return {
-            "status": "ERROR",
-            "cantidad_errores": 1,
-            "detalle_errores_facelec": ['''Existe más de una configuración para factura electrónica.
-                             Verifique que solo exista una validada en
-                             <a href='#List/Configuracion Factura Electronica'><b>Configuracion Factura Electronica</b></a>'''],
-            "uuid": ""
-        }
+        mensaje = "Error de configuración"
+        detalle = ['''Existe más de una configuración para factura electrónica.
+            Verifique que solo exista una validada en
+            <a href='#List/Configuracion Factura Electronica'><b>Configuracion Factura Electronica</b></a>''']
+        return send_response("ERROR", detalle, "", mensaje)
 
     elif validar_config[0] == 3:
-        return {
-            "status": "ERROR",
-            "cantidad_errores": 1,
-            "detalle_errores_facelec": ['''No se encontró una configuración válida. Verifique que exista una configuración validada en
-                             <a href='#List/Configuracion Factura Electronica'><b>Configuracion Factura Electronica</b></a>'''],
-            "uuid": ""
-        }
+        detalle = ['''No se encontró una configuración válida. Verifique que exista una configuración validada en
+            <a href='#List/Configuracion Factura Electronica'><b>Configuracion Factura Electronica</b></a>''']
+        mensaje = "Error de configuración"
+        return send_response("ERROR", detalle, "", mensaje)
 
 
 @frappe.whitelist()

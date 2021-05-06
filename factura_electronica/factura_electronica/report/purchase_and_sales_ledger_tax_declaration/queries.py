@@ -100,7 +100,7 @@ def get_sales_invoice(filters):
 
     sales_invoices = frappe.db.sql(
         f"""SELECT DISTINCT name AS documento, 'V' AS compras_ventas, naming_series AS serie_doc, posting_date AS fecha_doc,
-            nit_face_customer AS nit_cliente_proveedor, customer AS nombre_cliente_proveedor, company,
+            customer_tax_id AS nit_cliente_proveedor, customer AS nombre_cliente_proveedor, company,
             currency, conversion_rate, name AS invoice_name,
             customer_address AS invoice_address, net_total, shs_total_iva_fac AS iva, company_address AS company_address_invoice,
             docstatus, taxes_and_charges, facelec_record_type, facelec_record_number AS no_constancia_exension_adqui_insu_reten_iva,

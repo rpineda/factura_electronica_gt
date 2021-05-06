@@ -2,7 +2,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " CJ",
+  "faceleccodigo_unidad_de_medida": "CJ",
   "modified": "2021-04-13 11:47:35.943980",
   "must_be_whole_number": 1,
   "name": "Box",
@@ -14,7 +14,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " PR",
+  "faceleccodigo_unidad_de_medida": "PR",
   "modified": "2021-04-14 15:13:35.512180",
   "must_be_whole_number": 1,
   "name": "Pair",
@@ -38,7 +38,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": "  M",
+  "faceleccodigo_unidad_de_medida": "M",
   "modified": "2021-04-14 13:09:59.467019",
   "must_be_whole_number": 0,
   "name": "Meter",
@@ -50,7 +50,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " CM",
+  "faceleccodigo_unidad_de_medida": "CM",
   "modified": "2021-04-13 11:48:08.246583",
   "must_be_whole_number": 0,
   "name": "Centimeter",
@@ -74,7 +74,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " IN",
+  "faceleccodigo_unidad_de_medida": "IN",
   "modified": "2021-04-13 13:29:13.107080",
   "must_be_whole_number": 0,
   "name": "Inch",
@@ -86,7 +86,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " MM",
+  "faceleccodigo_unidad_de_medida": "MM",
   "modified": "2021-04-14 13:20:01.649540",
   "must_be_whole_number": 0,
   "name": "Milimeter",
@@ -98,7 +98,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " YD",
+  "faceleccodigo_unidad_de_medida": "YD",
   "modified": "2021-04-14 15:33:05.926947",
   "must_be_whole_number": 0,
   "name": "Yard",
@@ -110,7 +110,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " M2",
+  "faceleccodigo_unidad_de_medida": "M2",
   "modified": "2021-04-14 13:10:20.580746",
   "must_be_whole_number": 0,
   "name": "Square Meter",
@@ -146,7 +146,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " P2",
+  "faceleccodigo_unidad_de_medida": "P2",
   "modified": "2021-04-14 14:25:49.783032",
   "must_be_whole_number": 0,
   "name": "Square Foot",
@@ -170,7 +170,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " M3",
+  "faceleccodigo_unidad_de_medida": "M3",
   "modified": "2021-04-14 13:10:52.845674",
   "must_be_whole_number": 0,
   "name": "Cubic Meter",
@@ -194,7 +194,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " LT",
+  "faceleccodigo_unidad_de_medida": "LT",
   "modified": "2021-04-14 13:07:19.344342",
   "must_be_whole_number": 0,
   "name": "Liter",
@@ -206,7 +206,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " MM",
+  "faceleccodigo_unidad_de_medida": "MM",
   "modified": "2021-04-14 13:14:30.387108",
   "must_be_whole_number": 0,
   "name": "Milliliter",
@@ -254,7 +254,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " KW",
+  "faceleccodigo_unidad_de_medida": "KW",
   "modified": "2021-04-13 13:37:09.232529",
   "must_be_whole_number": 0,
   "name": "Kilowatt",
@@ -266,7 +266,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": "  A",
+  "faceleccodigo_unidad_de_medida": " A",
   "modified": "2021-04-13 11:20:52.817349",
   "must_be_whole_number": 0,
   "name": "Abampere",
@@ -998,7 +998,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " EP",
+  "faceleccodigo_unidad_de_medida": "EP",
   "modified": "2021-04-13 11:58:09.881097",
   "must_be_whole_number": 0,
   "name": "Marketing element",
@@ -1094,7 +1094,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " FR",
+  "faceleccodigo_unidad_de_medida": "FR",
   "modified": "2021-04-13 13:21:17.112802",
   "must_be_whole_number": 0,
   "name": "Jar",
@@ -1226,7 +1226,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " KG",
+  "faceleccodigo_unidad_de_medida": "KG",
   "modified": "2021-04-13 13:32:19.106780",
   "must_be_whole_number": 0,
   "name": "Kilogram",
@@ -1274,7 +1274,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " KV",
+  "faceleccodigo_unidad_de_medida": "KV",
   "modified": "2021-04-13 13:36:21.165804",
   "must_be_whole_number": 0,
   "name": "Kilovolts",
@@ -1502,7 +1502,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " MT",
+  "faceleccodigo_unidad_de_medida": "MT",
   "modified": "2021-04-14 13:15:27.902867",
   "must_be_whole_number": 0,
   "name": "Linear Meter",
@@ -1514,7 +1514,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " MM",
+  "faceleccodigo_unidad_de_medida": "MM",
   "modified": "2021-04-14 13:19:38.690572",
   "must_be_whole_number": 0,
   "name": "Milimeters",
@@ -1550,7 +1550,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " MW",
+  "faceleccodigo_unidad_de_medida": "MW",
   "modified": "2021-04-14 13:24:05.578339",
   "must_be_whole_number": 0,
   "name": "Megawatts",
@@ -1778,7 +1778,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " QT",
+  "faceleccodigo_unidad_de_medida": "QT",
   "modified": "2021-04-14 15:16:57.068114",
   "must_be_whole_number": 0,
   "name": "Quart",
@@ -1838,7 +1838,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " RL",
+  "faceleccodigo_unidad_de_medida": "RL",
   "modified": "2021-04-14 15:18:51.567856",
   "must_be_whole_number": 0,
   "name": "Roll",
@@ -1970,7 +1970,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " TE",
+  "faceleccodigo_unidad_de_medida": "TE",
   "modified": "2021-04-14 15:25:04.010555",
   "must_be_whole_number": 0,
   "name": "Spanish tonnes",
@@ -2018,7 +2018,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " TM",
+  "faceleccodigo_unidad_de_medida": "TM",
   "modified": "2021-04-14 15:26:11.236605",
   "must_be_whole_number": 0,
   "name": "Metric Tonnes",
@@ -2078,7 +2078,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " UP",
+  "faceleccodigo_unidad_de_medida": "UP",
   "modified": "2021-04-14 15:30:53.679208",
   "must_be_whole_number": 0,
   "name": "Up",
@@ -2186,7 +2186,7 @@
  {
   "docstatus": 0,
   "doctype": "UOM",
-  "faceleccodigo_unidad_de_medida": " EA",
+  "faceleccodigo_unidad_de_medida": "EA",
   "modified": "2021-04-13 11:57:29.209805",
   "must_be_whole_number": 1,
   "name": "Unit",

@@ -32,7 +32,7 @@ def sales_invoices(filters):
     # Facturas
     invoices = frappe.db.sql(
         f"""SELECT DISTINCT name AS num_doc, posting_date AS date, naming_series AS type_doc,
-            nit_face_customer AS tax_id, customer, grand_total AS total, currency
+            customer_tax_id AS tax_id, customer, grand_total AS total, currency
             FROM `tabSales Invoice` WHERE docstatus=1 AND company = '{filters.company}'
             AND posting_date BETWEEN '{filters.from_date}'
             AND '{filters.to_date}' {filters_query}

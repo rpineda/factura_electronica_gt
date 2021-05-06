@@ -299,7 +299,7 @@ class FacturaElectronicaFEL:
             # Obtencion data de RECEPTOR/CLIENTE
             dat_fac = frappe.db.get_values('Sales Invoice',
                                            filters={'name': self.serie_factura},
-                                           fieldname=['nit_face_customer', 'customer_address'],
+                                           fieldname=['customer_tax_id', 'customer_address'],
                                            as_dict=1)
 
             # Intentara obtener data de direccion cliente, si no hay mostrara error
@@ -319,10 +319,10 @@ class FacturaElectronicaFEL:
             else:
                 return 'No se encontro ninguna direccion para el cliente, verificar que exista una e intentar de nuevo ya que es necesaria para generar factura electronica'
 
-            if (dat_fac[0]['nit_face_customer']).upper() == 'C/F':
+            if (dat_fac[0]['customer_tax_id']).upper() == 'C/F':
                 self.d_receptor = {
                     "@CorreoReceptor": dat_direccion[0]['email_id'],
-                    "@IDReceptor": (dat_fac[0]['nit_face_customer']).replace('/', ''),  # NIT => CF
+                    "@IDReceptor": (dat_fac[0]['customer_tax_id']).replace('/', ''),  # NIT => CF
                     "@NombreReceptor": str(self.nombre_cliente),
                     "dte:DireccionReceptor": {
                         "dte:Direccion": dat_direccion[0]['address_line1'],
@@ -335,7 +335,7 @@ class FacturaElectronicaFEL:
             else:
                 self.d_receptor = {
                     "@CorreoReceptor": dat_direccion[0]['email_id'],
-                    "@IDReceptor": (dat_fac[0]['nit_face_customer']).replace('-', ''),  # NIT
+                    "@IDReceptor": (dat_fac[0]['customer_tax_id']).replace('-', ''),  # NIT
                     "@NombreReceptor": str(self.nombre_cliente),
                     "dte:DireccionReceptor": {
                         "dte:Direccion": dat_direccion[0]['address_line1'],

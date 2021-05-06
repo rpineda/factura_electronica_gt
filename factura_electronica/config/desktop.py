@@ -9,12 +9,10 @@ from frappe import _
 def get_data():
 	return [
 		{
-			"module_name": "Factura Electronica",
-			"category": "Modules",
-			"label": _("Factura Electronica"),
-			"color": "#112C5E",
+			"module_name": "Factura Electrónica",
+			"color": "grey",
 			"icon": "octicon octicon-desktop-download",
 			"type": "module",
-			"description": "Dive into the basics for your organisation's needs.",
+			"label": __("Factura Electrónica")
 		}
 	]

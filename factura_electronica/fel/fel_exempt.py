@@ -178,7 +178,7 @@ class ExemptElectronicInvoice:
         try:
             # De la factura obtenemos la compañia y direccion compañia emisora
             self.dat_fac = frappe.db.get_values('Sales Invoice', filters={'name': self.__invoice_code},
-                                                fieldname=['company', 'company_address', 'nit_face_customer',
+                                                fieldname=['company', 'company_address', 'customer_tax_id',
                                                            'customer_address', 'customer_name', 'total_taxes_and_charges',
                                                            'grand_total'], as_dict=1)
             if len(self.dat_fac) == 0:
@@ -283,10 +283,10 @@ class ExemptElectronicInvoice:
 
                 # Si es consumidor Final: para generar factura electronica obligatoriamente se debe asignar un correo
                 # electronico, los demas campos se pueden dejar como defualt para ciudad
-                if str(self.dat_fac[0]['nit_face_customer']).upper() == 'C/F':
+                if str(self.dat_fac[0]['customer_tax_id']).upper() == 'C/F':
                     self.__d_receptor = {
                         "@CorreoReceptor": datos_default.get('email'),
-                        "@IDReceptor": str((self.dat_fac[0]['nit_face_customer']).replace('/', '')).upper(),  # NIT => CF
+                        "@IDReceptor": str((self.dat_fac[0]['customer_tax_id']).replace('/', '')).upper(),  # NIT => CF
                         "@NombreReceptor": str(self.dat_fac[0]["customer_name"]),
                         "dte:DireccionReceptor": {
                             "dte:Direccion": datos_default.get('address'),
@@ -299,7 +299,7 @@ class ExemptElectronicInvoice:
                 else:
                     self.__d_receptor = {
                         "@CorreoReceptor": datos_default.get('email'),
-                        "@IDReceptor": str((self.dat_fac[0]['nit_face_customer']).replace('-', '')).upper(),  # NIT
+                        "@IDReceptor": str((self.dat_fac[0]['customer_tax_id']).replace('-', '')).upper(),  # NIT
                         "@NombreReceptor": str(self.dat_fac[0]["customer_name"]),
                         "dte:DireccionReceptor": {
                             "dte:Direccion": datos_default.get('address'),
@@ -313,10 +313,10 @@ class ExemptElectronicInvoice:
             else:
                 # Si es consumidor Final: para generar factura electronica obligatoriamente se debe asignar un correo
                 # electronico, los demas campos se pueden dejar como defualt para ciudad
-                if str(self.dat_fac[0]['nit_face_customer']).upper() == 'C/F':
+                if str(self.dat_fac[0]['customer_tax_id']).upper() == 'C/F':
                     self.__d_receptor = {
                         "@CorreoReceptor": dat_direccion[0].get('email_id', datos_default.get('email')),
-                        "@IDReceptor": str((self.dat_fac[0]['nit_face_customer']).replace('/', '')).upper(),  # NIT => CF
+                        "@IDReceptor": str((self.dat_fac[0]['customer_tax_id']).replace('/', '')).upper(),  # NIT => CF
                         "@NombreReceptor": str(self.dat_fac[0]["customer_name"]),
                         "dte:DireccionReceptor": {
                             "dte:Direccion": dat_direccion[0].get('address_line1', datos_default.get('address')),
@@ -329,7 +329,7 @@ class ExemptElectronicInvoice:
                 else:
                     self.__d_receptor = {
                         "@CorreoReceptor": dat_direccion[0].get('email_id', datos_default.get('email')),
-                        "@IDReceptor": str((self.dat_fac[0]['nit_face_customer']).replace('-', '')).upper(),  # NIT
+                        "@IDReceptor": str((self.dat_fac[0]['customer_tax_id']).replace('-', '')).upper(),  # NIT
                         "@NombreReceptor": str(self.dat_fac[0]["customer_name"]),
                         "dte:DireccionReceptor": {
                             "dte:Direccion": dat_direccion[0].get('address_line1', datos_default.get('address')),

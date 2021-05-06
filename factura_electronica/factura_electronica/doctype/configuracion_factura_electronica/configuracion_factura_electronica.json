@@ -1,686 +1,444 @@
 {
- "autoname": "CONFIG-FAC.#####",
- "creation": "2017-09-20 23:27:25.276704",
- "doctype": "DocType",
- "document_type": "Setup",
- "editable_grid": 1,
- "engine": "InnoDB",
- "field_order": [
-  "regimen",
-  "generacion_factura",
-  "url_descarga_pdf",
-  "configuracion_pdf",
-  "descargar_pdf_factura_electronica",
-  "company",
-  "usar_datos_prueba",
-  "nombre_empresa_prueba",
-  "documentos_electronicos_section",
-  "factura_venta_fel",
-  "nota_credito_fel",
-  "anulador_de_facturas_ventas_fel",
-  "factura_exportacion_fel",
-  "column_break_13",
-  "nota_de_debito_electronica",
-  "factura_cambiaria_fel",
-  "factura_especial_fel",
-  "factura_electronica_fel_pos",
-  "datos_proveedor_factura_electronica",
-  "clave",
-  "usuario",
-  "shs_confguracion",
-  "url_listener",
-  "validador",
-  "configuracion_de_series",
-  "configuracion_series",
-  "datos_establecimiento",
-  "codigo_establecimiento",
-  "descripcion_otro_impuesto",
-  "importe_exento",
-  "importe_otros_impuestos",
-  "id_dispositivo",
-  "datos_estab",
-  "nit_gface",
-  "importe_total_exento",
-  "regimen_2989",
-  "regimen_isr",
-  "amended_from",
-  "facturas_especiales",
-  "plantilla_impuestos",
-  "series_facturas_especiales",
-  "datos_fel_section",
-  "correo_copia",
-  "llave_pfx",
-  "codigo",
-  "es_anulacion",
-  "tipo_frase",
-  "codigo_escenario",
-  "tipo_frase_factura_especial",
-  "codigo_escenario_factura_especial",
-  "tipo_frase_factura_exportacion",
-  "codigo_escenario_factura_exportacion",
-  "column_break_32",
-  "alias",
-  "url_firma",
-  "url_dte",
-  "url_de_anulacion",
-  "llave_ws",
-  "afiliacion_iva",
-  "tipo_frase_factura_exenta",
-  "codigo_escenario_factura_exenta",
-  "local_currency",
-  "configuracion_series_fel_section",
-  "series_fel",
-  "series_configuration_for_purchase_invoices_section",
-  "purchase_invoice_series",
-  "configuracion_correo_electronico_section",
-  "asunto",
-  "mensaje",
-  "enviado_por",
-  "otras_configuraciones_section",
-  "descripcion_item",
-  "fecha_y_tiempo_documento_electronica"
- ],
- "fields": [
-  {
-   "columns": 5,
-   "fieldname": "generacion_factura",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Modalidad Generacion Factura Electronica",
-   "options": "MANUAL",
-   "read_only": 1
-  },
-  {
-   "fieldname": "url_descarga_pdf",
-   "fieldtype": "Data",
-   "label": "URL descarga pdf",
-   "reqd": 1
-  },
-  {
-   "fieldname": "configuracion_pdf",
-   "fieldtype": "Column Break"
-  },
-  {
-   "description": "Activa/Desactiva la funcionalidad para descargar el PDF de factura electronica, guardarlo en el servidor y adjuntarlo a la factura",
-   "fieldname": "descargar_pdf_factura_electronica",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Descargar PDF Factura Electronica",
-   "options": "DESACTIVAR",
-   "read_only": 1
-  },
-  {
-   "depends_on": "eval:(doc.regimen === 'GFACE')",
-   "fieldname": "datos_proveedor_factura_electronica",
-   "fieldtype": "Section Break",
-   "label": "DATOS PROVEEDOR FACTURA ELECTRONICA"
-  },
-  {
-   "fieldname": "clave",
-   "fieldtype": "Data",
-   "label": "Clave"
-  },
-  {
-   "fieldname": "usuario",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Usuario"
-  },
-  {
-   "fieldname": "shs_confguracion",
-   "fieldtype": "Column Break"
-  },
-  {
-   "bold": 1,
-   "fieldname": "url_listener",
-   "fieldtype": "Data",
-   "label": "URL Web Service"
-  },
-  {
-   "fieldname": "validador",
-   "fieldtype": "Data",
-   "label": "Validador"
-  },
-  {
-   "depends_on": "eval:doc.regimen === 'GFACE';",
-   "fieldname": "configuracion_de_series",
-   "fieldtype": "Section Break",
-   "label": "Configuracion de Series GFACE"
-  },
-  {
-   "bold": 1,
-   "fieldname": "configuracion_series",
-   "fieldtype": "Table",
-   "label": "Configuracion Series GFACE",
-   "options": "Configuracion Series"
-  },
-  {
-   "depends_on": "eval:doc.regimen == \"GFACE\"",
-   "fieldname": "datos_establecimiento",
-   "fieldtype": "Section Break",
-   "label": "DATOS ESTABLECIMIENTO GFACE"
-  },
-  {
-   "description": "FEL/GFACE",
-   "fieldname": "codigo_establecimiento",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Codigo Establecimiento",
-   "length": 4
-  },
-  {
-   "fieldname": "descripcion_otro_impuesto",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Descripcion Otro Impuesto",
-   "length": 100
-  },
-  {
-   "fieldname": "importe_exento",
-   "fieldtype": "Data",
-   "label": "Importe Exento"
-  },
-  {
-   "fieldname": "importe_otros_impuestos",
-   "fieldtype": "Data",
-   "label": "Importe Otros Impuestos"
-  },
-  {
-   "description": "FEL/GFACE",
-   "fieldname": "id_dispositivo",
-   "fieldtype": "Data",
-   "label": "ID Dispositivo",
-   "length": 3
-  },
-  {
-   "fieldname": "datos_estab",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "nit_gface",
-   "fieldtype": "Data",
-   "label": "NIT GFACE"
-  },
-  {
-   "fieldname": "importe_total_exento",
-   "fieldtype": "Data",
-   "label": "Importe Total Exento"
-  },
-  {
-   "default": "0",
-   "description": "Indique si esta afecto al r\u00e9gimen decreto 29-89, si la caja est\u00e1 seleccionada, la respuesta es afirmativa.",
-   "fieldname": "regimen_2989",
-   "fieldtype": "Check",
-   "hidden": 1,
-   "label": "\u00bfAfecto al regimen 2989?"
-  },
-  {
-   "fieldname": "regimen_isr",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Regimen ISR",
-   "length": 20,
-   "options": "RET_DEFINITIVA\nNO_RET_DEFINITIVA"
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Configuracion Factura Electronica",
-   "print_hide": 1,
-   "read_only": 1
-  },
-  {
-   "collapsible": 1,
-   "depends_on": "eval:doc.regimen === 'GFACE';",
-   "fieldname": "facturas_especiales",
-   "fieldtype": "Section Break",
-   "label": "Facturas Especiales"
-  },
-  {
-   "description": "Elija la plantilla de impuestos para facturas especiales.",
-   "fieldname": "plantilla_impuestos",
-   "fieldtype": "Link",
-   "label": "Plantilla Impuestos",
-   "options": "Purchase Taxes and Charges Template"
-  },
-  {
-   "fieldname": "series_facturas_especiales",
-   "fieldtype": "Table",
-   "label": "Series Factura Especial",
-   "options": "Series Factura Especial"
-  },
-  {
-   "fieldname": "regimen",
-   "fieldtype": "Select",
-   "label": "Regimen",
-   "options": "FEL",
-   "read_only": 1,
-   "reqd": 1
-  },
-  {
-   "collapsible_depends_on": "eval: doc.regimen === 'FEL';",
-   "depends_on": "eval:doc.regimen === 'FEL';",
-   "fieldname": "datos_fel_section",
-   "fieldtype": "Section Break",
-   "label": "DATOS FEL"
-  },
-  {
-   "description": "FEL",
-   "fieldname": "llave_pfx",
-   "fieldtype": "Data",
-   "label": "Llave PFX para firmar (Token Signer)"
-  },
-  {
-   "description": "FEL",
-   "fieldname": "codigo",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Codigo"
-  },
-  {
-   "fieldname": "column_break_32",
-   "fieldtype": "Column Break"
-  },
-  {
-   "description": "FEL",
-   "fieldname": "alias",
-   "fieldtype": "Data",
-   "label": "Alias (Prefijo WS)"
-  },
-  {
-   "collapsible": 1,
-   "depends_on": "eval:doc.regimen === 'FEL';",
-   "fieldname": "configuracion_series_fel_section",
-   "fieldtype": "Section Break",
-   "label": "Configuracion Series FEL"
-  },
-  {
-   "fieldname": "series_fel",
-   "fieldtype": "Table",
-   "label": "Series FEL",
-   "options": "Configuracion Series FEL"
-  },
-  {
-   "description": "FEL",
-   "fieldname": "url_dte",
-   "fieldtype": "Data",
-   "label": "URL DTE"
-  },
-  {
-   "description": "FEL",
-   "fieldname": "url_firma",
-   "fieldtype": "Data",
-   "label": "URL Firma"
-  },
-  {
-   "default": "N",
-   "description": "FEL: Por default se usa N",
-   "fieldname": "es_anulacion",
-   "fieldtype": "Data",
-   "label": "Es Anulacion",
-   "read_only": 1
-  },
-  {
-   "description": "FEL",
-   "fieldname": "tipo_frase",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Tipo Frase",
-   "options": "\n1: Frase de retencio\u0301n del ISR\n2: Frase de retencio\u0301n del IVA\n3: Frase de no genera derecho a cre\u0301dito fiscal del IVA\n4: Frase de exento o no afecto al IVA"
-  },
-  {
-   "description": "<b>FEL:</b> Envia copia de factura electronica generada para el escenario <b>Cliente/Proveedor no provee su correo electronico</b>",
-   "fieldname": "correo_copia",
-   "fieldtype": "Data",
-   "label": "Correo Copia",
-   "options": "Email"
-  },
-  {
-   "collapsible": 1,
-   "fieldname": "configuracion_correo_electronico_section",
-   "fieldtype": "Section Break",
-   "hidden": 1,
-   "label": "Configuracion Correo Electronico"
-  },
-  {
-   "fieldname": "asunto",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Asunto"
-  },
-  {
-   "fieldname": "mensaje",
-   "fieldtype": "Text Editor",
-   "hidden": 1,
-   "label": "Mensaje"
-  },
-  {
-   "fieldname": "enviado_por",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "label": "Enviado por",
-   "options": "User"
-  },
-  {
-   "description": "FEL",
-   "fieldname": "llave_ws",
-   "fieldtype": "Data",
-   "label": "Llave Web Service"
-  },
-  {
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "label": "Company",
-   "options": "Company"
-  },
-  {
-   "description": "FEL: De acuerdo al R\u00e9gimen que\ntenga registrado el contribuyente, se refiere a que puede ser General/Exento o Peque\u00f1o Contribuyente.",
-   "fieldname": "afiliacion_iva",
-   "fieldtype": "Select",
-   "label": "Afiliacion IVA",
-   "options": "\nGEN\nEXE\nPEQ"
-  },
-  {
-   "description": "FEL",
-   "fieldname": "codigo_escenario",
-   "fieldtype": "Int",
-   "hidden": 1,
-   "label": "Codigo Escenario"
-  },
-  {
-   "collapsible": 1,
-   "fieldname": "series_configuration_for_purchase_invoices_section",
-   "fieldtype": "Section Break",
-   "label": "Series Configuration For Purchase Invoices"
-  },
-  {
-   "fieldname": "purchase_invoice_series",
-   "fieldtype": "Table",
-   "label": "Purchase Invoice Series",
-   "options": "Serial Configuration For Purchase Invoice"
-  },
-  {
-   "default": "GTQ",
-   "fieldname": "local_currency",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Local Currency",
-   "options": "\nGTQ",
-   "read_only": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "usar_datos_prueba",
-   "fieldtype": "Check",
-   "label": "Usar datos prueba"
-  },
-  {
-   "depends_on": "eval:doc.usar_datos_prueba",
-   "fieldname": "nombre_empresa_prueba",
-   "fieldtype": "Data",
-   "label": "Nombre empresa prueba"
-  },
-  {
-   "description": "FEL: URL para anular documentos",
-   "fieldname": "url_de_anulacion",
-   "fieldtype": "Data",
-   "label": "URL de Anulacion"
-  },
-  {
-   "fieldname": "tipo_frase_factura_especial",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Tipo Frase Factura Especial",
-   "options": "\n5: Frase de facturas especiales\n6: Frases de Regimen Especial de contribuyente agropecuario"
-  },
-  {
-   "fieldname": "codigo_escenario_factura_especial",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Codigo Escenario Factura Especial"
-  },
-  {
-   "fieldname": "tipo_frase_factura_exportacion",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Tipo Frase Factura Exportacion",
-   "options": "\n1: Frase de retencio\u0301n del ISR\n2: Frase de retencio\u0301n del IVA\n3: Frase de no genera derecho a cre\u0301dito fiscal del IVA\n4: Frase de exento o no afecto al IVA"
-  },
-  {
-   "fieldname": "codigo_escenario_factura_exportacion",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Codigo Escenario Factura Exportacion"
-  },
-  {
-   "fieldname": "tipo_frase_factura_exenta",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Tipo Frase Factura Exenta",
-   "options": "\n1: Frase de retencio\u0301n del ISR\n2: Frase de retencio\u0301n del IVA\n3: Frase de no genera derecho a cre\u0301dito fiscal del IVA\n4: Frase de exento o no afecto al IVA"
-  },
-  {
-   "fieldname": "codigo_escenario_factura_exenta",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Codigo Escenario Factura Exenta"
-  },
-  {
-   "fieldname": "otras_configuraciones_section",
-   "fieldtype": "Section Break",
-   "label": "Otras Configuraciones"
-  },
-  {
-   "description": "Seleccione el campo que desea para el nombre del producto a mostrarse en la factura de la Emitida por la SAT.",
-   "fieldname": "descripcion_item",
-   "fieldtype": "Select",
-   "label": "Descripcion Item",
-   "options": "Nombre de Item\nDescripcion de Item"
-  },
-  {
-   "description": "<b>A continuaci\u00f3n los generadores disponibles en Factura Electr\u00f3nica App, seleccione los que desee para esta instancia: </b>",
-   "fieldname": "documentos_electronicos_section",
-   "fieldtype": "Section Break",
-   "label": "Documentos Electronicos"
-  },
-  {
-   "default": "0",
-   "fieldname": "factura_venta_fel",
-   "fieldtype": "Check",
-   "label": "Factura Venta FEL"
-  },
-  {
-   "default": "0",
-   "fieldname": "nota_credito_fel",
-   "fieldtype": "Check",
-   "label": "Nota Credito FEL"
-  },
-  {
-   "default": "0",
-   "fieldname": "anulador_de_facturas_ventas_fel",
-   "fieldtype": "Check",
-   "label": "Anulador de documentos FEL"
-  },
-  {
-   "fieldname": "column_break_13",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "factura_exportacion_fel",
-   "fieldtype": "Check",
-   "label": "Factura Exportacion FEL"
-  },
-  {
-   "default": "0",
-   "fieldname": "factura_especial_fel",
-   "fieldtype": "Check",
-   "label": "Factura Especial FEL"
-  },
-  {
-   "default": "0",
-   "description": "Disponible para Bienes y Servicios (No Combustibles)",
-   "fieldname": "factura_electronica_fel_pos",
-   "fieldtype": "Check",
-   "label": "Factura Electronica FEL (POS)"
-  },
-  {
-   "description": "Seleccione la opci\u00f3n de fecha y tiempo para enviar en el XML para generaci\u00f3n de documentos electr\u00f3nicos",
-   "fieldname": "fecha_y_tiempo_documento_electronica",
-   "fieldtype": "Select",
-   "label": "Fecha y tiempo documento electronica",
-   "options": "Fecha y tiempo de peticion a INFILE\nFecha y tiempo creacion documento"
-  },
-  {
-   "default": "0",
-   "fieldname": "nota_de_debito_electronica",
-   "fieldtype": "Check",
-   "label": "Nota de Debito FEL"
-  },
-  {
-   "default": "0",
-   "description": "Coming soon",
-   "fieldname": "factura_cambiaria_fel",
-   "fieldtype": "Check",
-   "label": "Factura Cambiaria FEL"
-  }
- ],
- "icon": "octicon octicon-gear",
- "is_submittable": 1,
- "modified": "2021-04-12 23:52:22.489382",
- "modified_by": "Administrator",
- "module": "Factura Electronica",
- "name": "Configuracion Factura Electronica",
- "owner": "Administrator",
- "permissions": [
-  {
-   "amend": 1,
-   "cancel": 1,
-   "create": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "submit": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Sales User",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Accounts User",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Sales Master Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Accounts Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Sales Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Projects User",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Projects Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Customer",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Fulfillment User",
-   "share": 1,
-   "write": 1
-  }
- ],
- "quick_entry": 1,
- "sort_field": "modified",
- "sort_order": "DESC",
- "track_changes": 1,
- "track_seen": 1
+    "autoname": "CONFIG-FAC.#####",
+    "creation": "2017-09-20 23:27:25.276704",
+    "doctype": "DocType",
+    "document_type": "Setup",
+    "editable_grid": 1,
+    "engine": "InnoDB",
+    "field_order": [
+        "regimen",
+        "company"
+    ],
+    "fields": [
+        {
+            "columns": 5,
+            "fieldname": "generacion_factura",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Modalidad Generacion Factura Electronica",
+            "options": "MANUAL",
+            "read_only": 1
+        },
+        {
+            "fieldname": "url_descarga_pdf",
+            "fieldtype": "Data",
+            "label": "URL descarga pdf",
+            "reqd": 1
+        },
+        {
+            "fieldname": "configuracion_pdf",
+            "fieldtype": "Column Break"
+        },
+        {
+            "description": "Activa/Desactiva la funcionalidad para descargar el PDF de factura electronica, guardarlo en el servidor y adjuntarlo a la factura",
+            "fieldname": "descargar_pdf_factura_electronica",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Descargar PDF Factura Electronica",
+            "options": "DESACTIVAR",
+            "read_only": 1
+        },
+        {
+            "fieldname": "regimen",
+            "fieldtype": "Select",
+            "label": "Regimen",
+            "options": "FEL",
+            "read_only": 1,
+            "reqd": 1
+        },
+        {
+            "collapsible_depends_on": "eval: doc.regimen === 'FEL';",
+            "depends_on": "eval:doc.regimen === 'FEL';",
+            "fieldname": "datos_fel_section",
+            "fieldtype": "Section Break",
+            "label": "DATOS FEL"
+        },
+        {
+            "description": "Usuario FEL API",
+            "fieldname": "username",
+            "fieldtype": "Data",
+            "label": "Nombre de usuario"
+        },
+        {
+            "description": "Contraseña FEL API",
+            "fieldname": "password",
+            "fieldtype": "Data",
+            "label": "Contraseña"
+        },
+
+        {
+            "fieldname": "column_break_32",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "certificador",
+            "fieldtype": "Select",
+            "label": "Certificador",
+            "options": "\nInfile\nMegaPrint\nForcon\nCofidi\nGuate Facturas\nSAT",
+            "reqd": 1
+        },
+        {
+            "collapsible": 1,
+            "depends_on": "eval:doc.regimen === 'FEL';",
+            "fieldname": "configuracion_series_fel_section",
+            "fieldtype": "Section Break",
+            "label": "Configuracion Series FEL"
+        },
+        {
+            "fieldname": "series_fel",
+            "fieldtype": "Table",
+            "label": "Series FEL",
+            "options": "Configuracion Series FEL"
+        },
+        {
+            "description": "",
+            "fieldname": "url_dte",
+            "fieldtype": "Data",
+            "label": "URL Factura"
+        },
+        {
+            "description": "",
+            "fieldname": "url_nc",
+            "fieldtype": "Data",
+            "label": "URL Nota de Crédito"
+        },
+        {
+            "default": "N",
+            "description": "FEL: Por default se usa N",
+            "fieldname": "es_anulacion",
+            "fieldtype": "Data",
+            "label": "Es Anulacion",
+            "read_only": 1,
+            "hidden": 1
+        },
+        {
+            "description": "",
+            "fieldname": "tipo_frase",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Tipo Frase",
+            "options": "\n1: Frase de retencio\u0301n del ISR\n2: Frase de retencio\u0301n del IVA\n3: Frase de no genera derecho a cre\u0301dito fiscal del IVA\n4: Frase de exento o no afecto al IVA"
+        },
+        {
+            "description": "<b>FEL:</b> Envia copia de factura electronica generada para el escenario <b>Cliente/Proveedor no provee su correo electronico</b>",
+            "fieldname": "correo_copia",
+            "fieldtype": "Data",
+            "label": "Correo Copia",
+            "options": "Email"
+        },
+        {
+            "fieldname": "company",
+            "fieldtype": "Link",
+            "label": "Company",
+            "options": "Company"
+        },
+        {
+            "description": "FEL: De acuerdo al R\u00e9gimen que\ntenga registrado el contribuyente, se refiere a que puede ser General/Exento o Peque\u00f1o Contribuyente.",
+            "fieldname": "afiliacion_iva",
+            "fieldtype": "Select",
+            "label": "Afiliacion IVA",
+            "options": "\nGEN\nEXE\nPEQ"
+        },
+        {
+            "description": "FEL",
+            "fieldname": "codigo_escenario",
+            "fieldtype": "Int",
+            "hidden": 1,
+            "label": "Codigo Escenario"
+        },
+        {
+            "collapsible": 1,
+            "fieldname": "series_configuration_for_purchase_invoices_section",
+            "fieldtype": "Section Break",
+            "label": "Series Configuration For Purchase Invoices"
+        },
+        {
+            "fieldname": "purchase_invoice_series",
+            "fieldtype": "Table",
+            "label": "Purchase Invoice Series",
+            "options": "Serial Configuration For Purchase Invoice"
+        },
+        {
+            "default": "GTQ",
+            "fieldname": "local_currency",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Local Currency",
+            "options": "\nGTQ",
+            "read_only": 1
+        },
+        {
+            "default": "0",
+            "fieldname": "usar_datos_prueba",
+            "fieldtype": "Check",
+            "label": "Usar datos prueba"
+        },
+        {
+            "depends_on": "eval:doc.usar_datos_prueba",
+            "fieldname": "nombre_empresa_prueba",
+            "fieldtype": "Data",
+            "label": "Nombre empresa prueba"
+        },
+        {
+            "description": "",
+            "fieldname": "url_anulacion",
+            "fieldtype": "Data",
+            "label": "URL de Anulacion"
+        },
+        {
+            "fieldname": "tipo_frase_factura_especial",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Tipo Frase Factura Especial",
+            "options": "\n5: Frase de facturas especiales\n6: Frases de Regimen Especial de contribuyente agropecuario"
+        },
+        {
+            "fieldname": "codigo_escenario_factura_especial",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Codigo Escenario Factura Especial"
+        },
+        {
+            "fieldname": "tipo_frase_factura_exportacion",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Tipo Frase Factura Exportacion",
+            "options": "\n1: Frase de retencio\u0301n del ISR\n2: Frase de retencio\u0301n del IVA\n3: Frase de no genera derecho a cre\u0301dito fiscal del IVA\n4: Frase de exento o no afecto al IVA"
+        },
+        {
+            "fieldname": "codigo_escenario_factura_exportacion",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Codigo Escenario Factura Exportacion"
+        },
+        {
+            "fieldname": "tipo_frase_factura_exenta",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Tipo Frase Factura Exenta",
+            "options": "\n1: Frase de retencio\u0301n del ISR\n2: Frase de retencio\u0301n del IVA\n3: Frase de no genera derecho a cre\u0301dito fiscal del IVA\n4: Frase de exento o no afecto al IVA"
+        },
+        {
+            "fieldname": "codigo_escenario_factura_exenta",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Codigo Escenario Factura Exenta"
+        },
+        {
+            "fieldname": "otras_configuraciones_section",
+            "fieldtype": "Section Break",
+            "label": "Otras Configuraciones"
+        },
+        {
+            "description": "Seleccione el campo que desea para el nombre del producto a mostrarse en la factura de la Emitida por la SAT.",
+            "fieldname": "descripcion_item",
+            "fieldtype": "Select",
+            "label": "Descripcion Item",
+            "options": "Nombre de Item\nDescripcion de Item"
+        },
+        {
+            "description": "<b>A continuaci\u00f3n los generadores disponibles en Factura Electr\u00f3nica App, seleccione los que desee para esta instancia: </b>",
+            "fieldname": "documentos_electronicos_section",
+            "fieldtype": "Section Break",
+            "label": "Documentos Electronicos"
+        },
+        {
+            "default": "0",
+            "fieldname": "factura_venta_fel",
+            "fieldtype": "Check",
+            "label": "Factura Venta FEL"
+        },
+        {
+            "default": "0",
+            "fieldname": "nota_credito_fel",
+            "fieldtype": "Check",
+            "label": "Nota Credito FEL"
+        },
+        {
+            "default": "0",
+            "fieldname": "anulador_de_facturas_ventas_fel",
+            "fieldtype": "Check",
+            "label": "Anulador de documentos FEL"
+        },
+        {
+            "fieldname": "column_break_13",
+            "fieldtype": "Column Break"
+        },
+        {
+            "default": "0",
+            "fieldname": "factura_exportacion_fel",
+            "fieldtype": "Check",
+            "label": "Factura Exportacion FEL"
+        },
+        {
+            "default": "0",
+            "fieldname": "factura_especial_fel",
+            "fieldtype": "Check",
+            "label": "Factura Especial FEL"
+        },
+        {
+            "default": "0",
+            "description": "Disponible para Bienes y Servicios (No Combustibles)",
+            "fieldname": "factura_electronica_fel_pos",
+            "fieldtype": "Check",
+            "label": "Factura Electronica FEL (POS)"
+        },
+        {
+            "description": "Seleccione la opci\u00f3n de fecha y tiempo para enviar en el XML para generaci\u00f3n de documentos electr\u00f3nicos",
+            "fieldname": "fecha_y_tiempo_documento_electronica",
+            "fieldtype": "Select",
+            "label": "Fecha y tiempo documento electronica",
+            "hidden": 1,
+            "options": "Fecha y tiempo de peticion a INFILE\nFecha y tiempo creacion documento"
+        },
+        {
+            "default": "0",
+            "fieldname": "nota_de_debito_electronica",
+            "fieldtype": "Check",
+            "label": "Nota de Debito FEL"
+        },
+        {
+            "default": "0",
+            "description": "Coming soon",
+            "fieldname": "factura_cambiaria_fel",
+            "fieldtype": "Check",
+            "label": "Factura Cambiaria FEL"
+        }
+    ],
+    "icon": "octicon octicon-gear",
+    "is_submittable": 1,
+    "modified": "2021-04-12 23:52:22.489382",
+    "modified_by": "Administrator",
+    "module": "Factura Electronica",
+    "name": "Configuracion Factura Electronica",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "amend": 1,
+            "cancel": 1,
+            "create": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "submit": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Sales User",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Accounts User",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Sales Master Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Accounts Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Sales Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Projects User",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Projects Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Customer",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Fulfillment User",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "quick_entry": 1,
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "track_changes": 1,
+    "track_seen": 1
 }

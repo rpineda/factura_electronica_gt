@@ -185,7 +185,7 @@ def get_sales_invoice(filters):
     return []
     # sales_invoices = frappe.db.sql(
     #     f"""SELECT DISTINCT name AS invoce_number, posting_date AS postin_date,
-    #         nit_face_customer AS tax_id, customer AS FROM `tabSales Invoice`
+    #         customer_tax_id AS tax_id, customer AS FROM `tabSales Invoice`
     #         WHERE posting_date BETWEEN '{filters.from_date}' AND '{filters.to_date}' AND docstatus=1
     #         AND company='{filters.company}';
     #     """, as_dict=True

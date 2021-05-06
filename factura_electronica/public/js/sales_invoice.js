@@ -21,7 +21,7 @@ function facelec_tax_calc_new(frm, cdt, cdn) {
     // INICIO validacion existencia tabla impuesto
     var this_company_sales_tax_var = 0;
 
-    if ((cur_frm.doc.taxes.length > 0) && (cur_frm.doc.taxes[0].rate !== "undefined")) {
+    if (cur_frm.doc.taxes !== undefined && (cur_frm.doc.taxes.length > 0) && (cur_frm.doc.taxes[0].rate !== "undefined")) {
         this_company_sales_tax_var = cur_frm.doc.taxes[0].rate;
     } else {
         // Muestra una notificacion para cargar una tabla de impuestos
@@ -489,7 +489,7 @@ frappe.ui.form.on("Sales Invoice", {
         // Trigger refresh de pagina
         // es-GT: Obtiene el numero de Identificacion tributaria ingresado en la hoja del cliente.
         // en-US: Fetches the Taxpayer Identification Number entered in the Customer doctype.
-        cur_frm.add_fetch("customer", "nit_face_customer", "nit_face_customer");
+        cur_frm.add_fetch("customer", "tax_id", "customer_tax_id");
 
         clean_fields(frm);
 
@@ -585,9 +585,9 @@ frappe.ui.form.on("Sales Invoice", {
         // Trigger antes de guardar
         clean_other_tax(frm);
     },
-    nit_face_customer: function (frm, cdt, cdn) {
+    customer_tax_id: function (frm, cdt, cdn) {
         // Para evitar retrasos la validacion se realiza desde customer dt
-        // valNit(frm.doc.nit_face_customer, frm.doc.customer, frm);
+        // valNit(frm.doc.customer_tax_id, frm.doc.customer, frm);
     },
     additional_discount_percentage: function (frm, cdt, cdn) {
         // Pensando en colocar un trigger aqui para cuando se actualice el campo de descuento adicional
