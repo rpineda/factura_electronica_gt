@@ -64,27 +64,29 @@ def get_description_phrase_fel(frase_catalogo='', codigo_frase_hija=''):
         return '<code>Codigo No disponible, para la frase seleccionada</code>'
 
 @frappe.whitelist()
-def get_jwt_api(params):
+def get_jwt_api(name):
     try:        
-        url = params['url']+'/oauth/v2/token'
-        client_id = params['client_id']
-        client_secret = params['client_secret']
-        username = params['username']
-        password = params['password']
+        doc = frappe.get_doc("Configuracion Factura Electronica", name)
+        #password = doc.get_password('password')
+
+        url = doc.get('url_base').replace('/api','')+'/oauth/v2/token'
 
         payload = {
-            "client_id": client_id,
-            "client_secret": client_secret,
+            "client_id": doc.get('client_id'),
+            "client_secret": doc.get('client_secret'),
             "grant_type": "password",
-            "username": username,
-            "password": password
-        }
+            "username": doc.get('username'),
+            "password": doc.get_password('password')
+        } 
 
         headers = {"Content-Type": "application/json"}
 
-        response = requests.request("POST", url, json=payload, headers=headers)
-        xret = response.get('access_token')
-    except Exception as e:
-        xret = ""
+        response = requests.post(url, json=payload, headers=headers)
 
-    return xret
+        #return response.text
+        #xret = json.dumps({url: url, payload: json.dumps(payload)})
+        #return { "response_status": 200, "data": response.text }
+        return json.loads(response.text)
+    except Exception as e:
+        return { error: true, error_description: e }
+

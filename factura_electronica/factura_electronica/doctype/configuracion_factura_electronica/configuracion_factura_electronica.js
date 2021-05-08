@@ -4,22 +4,32 @@
 frappe.ui.form.on('Configuracion Factura Electronica', "update_jwt_api", function(frm, cdt, cdn) {
     let row = frappe.get_doc(cdt, cdn);
 
+    row.jwt_api = 'Actualizando por favor espere...'
+    cur_frm.refresh_field('jwt_api')
+    refresh_field('jwt_api')
+
     frappe.call({
         method: "factura_electronica.factura_electronica.doctype.configuracion_factura_electronica.configuracion_factura_electronica.get_jwt_api",
         args: {
-            params: {
-                "client_id": row.client_id,
-                "client_secret": row.client_secret,
-                "grant_type": "password",
-                "username": row.username,
-                "password": row.password
-            }
+            name: row.name
         },
-        callback: function (jwt) {
-            row.jwt_api = jwt
-            cur_frm.refresh_field('jwt_api')
+        callback: function (res) {
+	    if(res.message.error_description!=undefined){
+	        frappe.show_alert({
+		  indicator: 'red',
+		  message: __(res.message.error_description)
+		})
+	    } else {
+                row.jwt_api = res.message.access_token
+                cur_frm.refresh_field('jwt_api')
 
-            refresh_field("jwt_api")
+                refresh_field("jwt_api") 
+
+		frappe.show_alert({
+	            indicator: 'blue',
+		    message: __('JWT Actualizado correctamente')
+		})
+	    }
         }
     });
 });
