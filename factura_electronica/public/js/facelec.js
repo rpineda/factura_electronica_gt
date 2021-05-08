@@ -38,13 +38,14 @@ export function valNit(nit, cus_supp, frm) {
             $.get( "https://felav02.c.sat.gob.gt/fel-rest/rest/publico/receptor/"+nit, function( data ) {
                 data = JSON.parse(data)
                 customer_name = data.respuesta.nombre
+                return { is_valid: true, name: customer_name }
             });
 
             frm.enable_save(); // Activa y Muestra el boton guardar de Sales Invoice
         }
     }
 
-    return { is_valid: true, name: customer_name }
+    return { is_valid: false, name: "" }
 }
 
 /* ----------------------------------------------------------------------------------------------------------------- */
