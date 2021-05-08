@@ -3,6 +3,7 @@
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
+import json
 
 import frappe
 
@@ -63,13 +64,15 @@ def get_description_phrase_fel(frase_catalogo='', codigo_frase_hija=''):
         return '<code>Codigo No disponible, para la frase seleccionada</code>'
 
 @frappe.whitelist()
-def get_jwt_api(params):
+def get_jwt_api(datos):
+
+    params = datos.params
     
-    url = params.get('url')+'/oauth/v2/token'
-    client_id = params.get('client_id')
-    client_secret = params.get('client_secret')
-    username = params.get('username')
-    password = params.get('password')
+    url = params.url+'/oauth/v2/token'
+    client_id = params.client_id
+    client_secret = params.client_secret
+    username = params.username
+    password = params.password
 
     payload = {
         "client_id": client_id,
