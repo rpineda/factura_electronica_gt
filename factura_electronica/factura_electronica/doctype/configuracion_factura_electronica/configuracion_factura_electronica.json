@@ -47,8 +47,8 @@
             "reqd": 1
         },
         {
-            "collapsible_depends_on": "eval: doc.regimen === '';",
-            "depends_on": "eval:doc.regimen === '';",
+            "collapsible_depends_on": "eval:doc.regimen === ''",
+            "depends_on": "eval:doc.regimen === ''",
             "fieldname": "datos__section",
             "fieldtype": "Section Break",
             "label": "DATOS "
