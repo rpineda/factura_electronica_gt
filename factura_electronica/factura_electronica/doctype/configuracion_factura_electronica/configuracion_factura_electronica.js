@@ -1,7 +1,7 @@
 // Copyright (c) 2017, Frappe and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on('Configuracion Factura Electronica', "update_jwt_api", function(frm, cdt, cdn) {
+frappe.ui.form.on('Configuracion Factura Electronica', "update_jwt_api", function (frm, cdt, cdn) {
     let row = frappe.get_doc(cdt, cdn);
 
     row.jwt_api = 'Actualizando por favor espere...'
@@ -14,22 +14,22 @@ frappe.ui.form.on('Configuracion Factura Electronica', "update_jwt_api", functio
             name: row.name
         },
         callback: function (res) {
-	    if(res.message.error_description!=undefined){
-	        frappe.show_alert({
-		  indicator: 'red',
-		  message: __(res.message.error_description)
-		})
-	    } else {
+            if (res.message.error_description != undefined) {
+                frappe.show_alert({
+                    indicator: 'red',
+                    message: __(res.message.error_description)
+                })
+            } else {
                 row.jwt_api = res.message.access_token
                 cur_frm.refresh_field('jwt_api')
 
-                refresh_field("jwt_api") 
+                refresh_field("jwt_api")
 
-		frappe.show_alert({
-	            indicator: 'blue',
-		    message: __('JWT Actualizado correctamente')
-		})
-	    }
+                frappe.show_alert({
+                    indicator: 'blue',
+                    message: __('JWT Actualizado correctamente')
+                })
+            }
         }
     });
 });

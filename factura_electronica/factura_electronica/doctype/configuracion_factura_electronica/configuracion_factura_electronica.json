@@ -14,6 +14,12 @@
         "url_descarga_pdf",
         "configuracion_pdf",
         "descargar_pdf_factura_electronica",
+        "tipo_frase_factura_especial",
+        "codigo_escenario_factura_especial",
+        "tipo_frase_factura_exportacion",
+        "codigo_escenario_factura_exportacion",
+        "tipo_frase_factura_exenta",
+        "codigo_escenario_factura_exenta",
         "datos__section",
         "client_id",
         "client_secret",
@@ -36,12 +42,6 @@
         "series_fel",
         "series_configuration_for_purchase_invoices_section",
         "purchase_invoice_series",
-        "tipo_frase_factura_especial",
-        "codigo_escenario_factura_especial",
-        "tipo_frase_factura_exportacion",
-        "codigo_escenario_factura_exportacion",
-        "tipo_frase_factura_exenta",
-        "codigo_escenario_factura_exenta",
         "otras_configuraciones_section",
         "descripcion_item",
         "documentos_electronicos_section",
@@ -93,7 +93,6 @@
             "options": "\nGTQ",
             "read_only": 1
         },
-
         {
             "fieldname": "configuracion_pdf",
             "fieldtype": "Column Break"
@@ -113,6 +112,45 @@
             "label": "Regimen",
             "options": "",
             "read_only": 1
+        },
+        {
+            "fieldname": "tipo_frase_factura_especial",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Tipo Frase Factura Especial",
+            "options": "\n5: Frase de facturas especiales\n6: Frases de Regimen Especial de contribuyente agropecuario"
+        },
+        {
+            "fieldname": "codigo_escenario_factura_especial",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Codigo Escenario Factura Especial"
+        },
+        {
+            "fieldname": "tipo_frase_factura_exportacion",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Tipo Frase Factura Exportacion",
+            "options": "\n1: Frase de retencio\u0301n del ISR\n2: Frase de retencio\u0301n del IVA\n3: Frase de no genera derecho a cre\u0301dito fiscal del IVA\n4: Frase de exento o no afecto al IVA"
+        },
+        {
+            "fieldname": "codigo_escenario_factura_exportacion",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Codigo Escenario Factura Exportacion"
+        },
+        {
+            "fieldname": "tipo_frase_factura_exenta",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Tipo Frase Factura Exenta",
+            "options": "\n1: Frase de retencio\u0301n del ISR\n2: Frase de retencio\u0301n del IVA\n3: Frase de no genera derecho a cre\u0301dito fiscal del IVA\n4: Frase de exento o no afecto al IVA"
+        },
+        {
+            "fieldname": "codigo_escenario_factura_exenta",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Codigo Escenario Factura Exenta"
         },
         {
             "collapsible": 1,
@@ -231,11 +269,10 @@
             "label": "Codigo Escenario"
         },
         {
-            "collapsible": 1,
-            "depends_on": "",
             "fieldname": "configuracion_series_fel_section",
             "fieldtype": "Section Break",
-            "label": "Configuracion Series FEL"
+            "label": "Configuracion Series FEL",
+            "collapsible": 1
         },
         {
             "fieldname": "series_fel",
@@ -255,46 +292,6 @@
             "label": "Purchase Invoice Series",
             "options": "Serial Configuration For Purchase Invoice"
         },
-
-        {
-            "fieldname": "tipo_frase_factura_especial",
-            "fieldtype": "Select",
-            "hidden": 1,
-            "label": "Tipo Frase Factura Especial",
-            "options": "\n5: Frase de facturas especiales\n6: Frases de Regimen Especial de contribuyente agropecuario"
-        },
-        {
-            "fieldname": "codigo_escenario_factura_especial",
-            "fieldtype": "Data",
-            "hidden": 1,
-            "label": "Codigo Escenario Factura Especial"
-        },
-        {
-            "fieldname": "tipo_frase_factura_exportacion",
-            "fieldtype": "Select",
-            "hidden": 1,
-            "label": "Tipo Frase Factura Exportacion",
-            "options": "\n1: Frase de retencio\u0301n del ISR\n2: Frase de retencio\u0301n del IVA\n3: Frase de no genera derecho a cre\u0301dito fiscal del IVA\n4: Frase de exento o no afecto al IVA"
-        },
-        {
-            "fieldname": "codigo_escenario_factura_exportacion",
-            "fieldtype": "Data",
-            "hidden": 1,
-            "label": "Codigo Escenario Factura Exportacion"
-        },
-        {
-            "fieldname": "tipo_frase_factura_exenta",
-            "fieldtype": "Select",
-            "hidden": 1,
-            "label": "Tipo Frase Factura Exenta",
-            "options": "\n1: Frase de retencio\u0301n del ISR\n2: Frase de retencio\u0301n del IVA\n3: Frase de no genera derecho a cre\u0301dito fiscal del IVA\n4: Frase de exento o no afecto al IVA"
-        },
-        {
-            "fieldname": "codigo_escenario_factura_exenta",
-            "fieldtype": "Data",
-            "hidden": 1,
-            "label": "Codigo Escenario Factura Exenta"
-        },
         {
             "fieldname": "otras_configuraciones_section",
             "fieldtype": "Section Break",
@@ -308,6 +305,7 @@
             "label": "Descripcion Item",
             "options": "Nombre de Item\nDescripcion de Item"
         },
+
         {
             "description": "<b>A continuaci\u00f3n los generadores disponibles en Factura Electr\u00f3nica App, seleccione los que desee para esta instancia: </b>",
             "fieldname": "documentos_electronicos_section",
