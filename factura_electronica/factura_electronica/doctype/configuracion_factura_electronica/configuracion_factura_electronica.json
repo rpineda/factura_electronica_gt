@@ -8,6 +8,9 @@
     "field_order": [
         "regimen",
         "generacion_factura",
+        "local_currency",
+        "usar_datos_prueba",
+        "nombre_empresa_prueba",
         "url_descarga_pdf",
         "configuracion_pdf",
         "descargar_pdf_factura_electronica",
@@ -33,9 +36,6 @@
         "series_fel",
         "series_configuration_for_purchase_invoices_section",
         "purchase_invoice_series",
-        "local_currency",
-        "usar_datos_prueba",
-        "nombre_empresa_prueba",
         "tipo_frase_factura_especial",
         "codigo_escenario_factura_especial",
         "tipo_frase_factura_exportacion",
@@ -67,11 +67,33 @@
             "read_only": 1
         },
         {
+            "default": "0",
+            "fieldname": "usar_datos_prueba",
+            "fieldtype": "Check",
+            "label": "Usar datos prueba"
+        },
+        {
+            "depends_on": "eval:doc.usar_datos_prueba",
+            "fieldname": "nombre_empresa_prueba",
+            "fieldtype": "Data",
+            "label": "Nombre empresa prueba"
+        },
+        {
             "fieldname": "url_descarga_pdf",
             "fieldtype": "Data",
             "label": "URL descarga pdf",
             "reqd": 1
         },
+        {
+            "default": "GTQ",
+            "fieldname": "local_currency",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Local Currency",
+            "options": "\nGTQ",
+            "read_only": 1
+        },
+
         {
             "fieldname": "configuracion_pdf",
             "fieldtype": "Column Break"
@@ -94,8 +116,7 @@
             "reqd": 1
         },
         {
-            "collapsible_depends_on": "eval:doc.regimen === ''",
-            "depends_on": "eval:doc.regimen === ''",
+            "collapsible": 1,
             "fieldname": "datos__section",
             "fieldtype": "Section Break",
             "label": "DATOS "
@@ -235,27 +256,7 @@
             "label": "Purchase Invoice Series",
             "options": "Serial Configuration For Purchase Invoice"
         },
-        {
-            "default": "GTQ",
-            "fieldname": "local_currency",
-            "fieldtype": "Select",
-            "hidden": 1,
-            "label": "Local Currency",
-            "options": "\nGTQ",
-            "read_only": 1
-        },
-        {
-            "default": "0",
-            "fieldname": "usar_datos_prueba",
-            "fieldtype": "Check",
-            "label": "Usar datos prueba"
-        },
-        {
-            "depends_on": "eval:doc.usar_datos_prueba",
-            "fieldname": "nombre_empresa_prueba",
-            "fieldtype": "Data",
-            "label": "Nombre empresa prueba"
-        },
+
         {
             "fieldname": "tipo_frase_factura_especial",
             "fieldtype": "Select",
@@ -298,7 +299,8 @@
         {
             "fieldname": "otras_configuraciones_section",
             "fieldtype": "Section Break",
-            "label": "Otras Configuraciones"
+            "label": "Otras Configuraciones",
+            "collapsible": 1
         },
         {
             "description": "Seleccione el campo que desea para el nombre del producto a mostrarse en la factura de la Emitida por la SAT.",

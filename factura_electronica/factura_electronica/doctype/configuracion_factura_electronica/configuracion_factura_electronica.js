@@ -1,7 +1,7 @@
 // Copyright (c) 2017, Frappe and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on('Configuracion Factura Electronica', "update_jwt_api", function(frm) {
+frappe.ui.form.on('Configuracion Factura Electronica', "update_jwt_api", function(frm, cdt, cdn) {
     let row = frappe.get_doc(cdt, cdn);
 
     params = {
