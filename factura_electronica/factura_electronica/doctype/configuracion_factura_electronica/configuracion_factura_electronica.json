@@ -113,7 +113,7 @@
             "label": "Regimen",
             "options": "",
             "read_only": 1,
-            "reqd": 1
+            "reqd": 0
         },
         {
             "collapsible": 1,
