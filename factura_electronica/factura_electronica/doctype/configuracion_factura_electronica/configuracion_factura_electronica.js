@@ -4,18 +4,16 @@
 frappe.ui.form.on('Configuracion Factura Electronica', "update_jwt_api", function(frm, cdt, cdn) {
     let row = frappe.get_doc(cdt, cdn);
 
-    params = {
-        "client_id": row.client_id,
-        "client_secret": row.client_secret,
-        "grant_type": "password",
-        "username": row.username,
-        "password": row.password
-    }
-
     frappe.call({
         method: "factura_electronica.factura_electronica.doctype.configuracion_factura_electronica.configuracion_factura_electronica.get_jwt_api",
         args: {
-            params: params
+            params: {
+                "client_id": row.client_id,
+                "client_secret": row.client_secret,
+                "grant_type": "password",
+                "username": row.username,
+                "password": row.password
+            }
         },
         callback: function (jwt) {
             row.jwt_api = jwt

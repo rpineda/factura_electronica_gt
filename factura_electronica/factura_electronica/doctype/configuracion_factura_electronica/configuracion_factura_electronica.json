@@ -112,8 +112,7 @@
             "fieldtype": "Select",
             "label": "Regimen",
             "options": "",
-            "read_only": 1,
-            "reqd": 0
+            "read_only": 1
         },
         {
             "collapsible": 1,
