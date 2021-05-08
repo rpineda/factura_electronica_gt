@@ -36,7 +36,7 @@ export function valNit(nit, cus_supp, frm) {
 
         if (nit_validado === true) {
             $.get( "https://felav02.c.sat.gob.gt/fel-rest/rest/publico/receptor/"+nit, function( data ) {
-                data = JSON.parse(data)
+                //data = JSON.parse(data)
                 customer_name = data.respuesta.nombre
                 return { is_valid: true, name: customer_name }
             });
@@ -76,8 +76,11 @@ frappe.ui.form.on("Item", {
 frappe.ui.form.on("Customer", {
     tax_id: function (frm) {
         xret = valNit(frm.doc.tax_id, frm.doc.name, frm);
-        cur_frm.set_value("customer_name", xret.name);
-        frm.refresh_field('customer_name');
+
+        if(xret.is_valid){
+            cur_frm.set_value("customer_name", xret.name);
+            frm.refresh_field('customer_name');
+        }
     },
     refresh: function (frm) {
         var cust_name_desc = __("Legal Name, for tax, government or contract use. For Example: Apple, Inc. Amazon.com, Inc., The Home Depot, Inc.");
