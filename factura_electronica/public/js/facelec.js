@@ -35,17 +35,9 @@ export function valNit(nit, cus_supp, frm) {
         }
 
         if (nit_validado === true) {
-            $.get( "https://felav02.c.sat.gob.gt/fel-rest/rest/publico/receptor/"+nit, function( data ) {
-                //data = JSON.parse(data)
-                customer_name = data.respuesta.nombre
-                return { is_valid: true, name: customer_name }
-            });
-
             frm.enable_save(); // Activa y Muestra el boton guardar de Sales Invoice
         }
     }
-
-    return { is_valid: false, name: "" }
 }
 
 /* ----------------------------------------------------------------------------------------------------------------- */
@@ -75,12 +67,7 @@ frappe.ui.form.on("Item", {
 // Descripcion de Nombre legal
 frappe.ui.form.on("Customer", {
     tax_id: function (frm) {
-        xret = valNit(frm.doc.tax_id, frm.doc.name, frm);
-
-        if(xret.is_valid){
-            cur_frm.set_value("customer_name", xret.name);
-            frm.refresh_field('customer_name');
-        }
+        valNit(frm.doc.tax_id, frm.doc.name, frm);
     },
     refresh: function (frm) {
         var cust_name_desc = __("Legal Name, for tax, government or contract use. For Example: Apple, Inc. Amazon.com, Inc., The Home Depot, Inc.");
@@ -97,10 +84,7 @@ frappe.ui.form.on("Supplier", {
     //     frm.set_value('tax_id', frm.doc.facelec_nit_proveedor);
     // },
     tax_id: function (frm) {
-        xret = valNit(frm.doc.tax_id, frm.doc.name, frm);
-        cur_frm.set_value("supplier_name", xret.name);
-        frm.refresh_field('supplier_name');
-
+        valNit(frm.doc.tax_id, frm.doc.name, frm);
         //frm.set_value('facelec_nit_proveedor', frm.doc.tax_id);
     },
     refresh: function (frm) {
@@ -116,9 +100,7 @@ frappe.ui.form.on("Company", {
         frm.set_value('tax_id', frm.doc.nit_face_company);
     },
     tax_id: function (frm) {
-        xret = valNit(frm.doc.tax_id, frm.doc.name, frm);
-        cur_frm.set_value("facelec_trade_name", xret.name);
-        frm.refresh_field('facelec_trade_name');
+        valNit(frm.doc.tax_id, frm.doc.name, frm);
         //frm.set_value('nit_face_company', frm.doc.tax_id);
     },
     setup: function (frm) {
