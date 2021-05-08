@@ -8,6 +8,7 @@ console.log("Se cargo exitosamente la aplicación de Factura Electrónica");
  */
 export function valNit(nit, cus_supp, frm) {
     var nit_validado;
+    var customer_name = "***";
     if (nit === "C/F" || nit === "c/f") {
         frm.enable_save(); // Activa y Muestra el boton guardar de Sales Invoice
     } else {
@@ -32,10 +33,18 @@ export function valNit(nit, cus_supp, frm) {
 
             frm.disable_save(); // Desactiva y Oculta el boton de guardar en Sales Invoice
         }
+
         if (nit_validado === true) {
+            $.get( "https://felav02.c.sat.gob.gt/fel-rest/rest/publico/receptor/"+nit, function( data ) {
+                data = JSON.parse(data)
+                customer_name = data.respuesta.nombre
+            });
+
             frm.enable_save(); // Activa y Muestra el boton guardar de Sales Invoice
         }
     }
+
+    return { is_valid: true, name: customer_name }
 }
 
 /* ----------------------------------------------------------------------------------------------------------------- */
@@ -65,7 +74,9 @@ frappe.ui.form.on("Item", {
 // Descripcion de Nombre legal
 frappe.ui.form.on("Customer", {
     tax_id: function (frm) {
-        valNit(frm.doc.tax_id, frm.doc.name, frm);
+        xret = valNit(frm.doc.tax_id, frm.doc.name, frm);
+        cur_frm.set_value("customer_name", xret.name);
+        frm.refresh_field('customer_name');
     },
     refresh: function (frm) {
         var cust_name_desc = __("Legal Name, for tax, government or contract use. For Example: Apple, Inc. Amazon.com, Inc., The Home Depot, Inc.");
@@ -77,13 +88,16 @@ frappe.ui.form.on("Customer", {
 // Validador NIT para Supplier
 // descripcion de nombre legal
 frappe.ui.form.on("Supplier", {
-    facelec_nit_proveedor: function (frm) {
-        valNit(frm.doc.facelec_nit_proveedor, frm.doc.name, frm);
-        frm.set_value('tax_id', frm.doc.facelec_nit_proveedor);
-    },
+    // facelec_nit_proveedor: function (frm) {
+    //     valNit(frm.doc.facelec_nit_proveedor, frm.doc.name, frm);
+    //     frm.set_value('tax_id', frm.doc.facelec_nit_proveedor);
+    // },
     tax_id: function (frm) {
-        valNit(frm.doc.tax_id, frm.doc.name, frm);
-        frm.set_value('facelec_nit_proveedor', frm.doc.tax_id);
+        xret = valNit(frm.doc.tax_id, frm.doc.name, frm);
+        cur_frm.set_value("supplier_name", xret.name);
+        frm.refresh_field('supplier_name');
+
+        //frm.set_value('facelec_nit_proveedor', frm.doc.tax_id);
     },
     refresh: function (frm) {
         var supp_name_desc = __("Legal Name, for tax, government or contract use. For Example: Apple, Inc. Amazon.com, Inc., The Home Depot, Inc.");
@@ -98,8 +112,10 @@ frappe.ui.form.on("Company", {
         frm.set_value('tax_id', frm.doc.nit_face_company);
     },
     tax_id: function (frm) {
-        // valNit(frm.doc.tax_id, frm.doc.name, frm);
-        frm.set_value('nit_face_company', frm.doc.tax_id);
+        xret = valNit(frm.doc.tax_id, frm.doc.name, frm);
+        cur_frm.set_value("facelec_trade_name", xret.name);
+        frm.refresh_field('facelec_trade_name');
+        //frm.set_value('nit_face_company', frm.doc.tax_id);
     },
     setup: function (frm) {
         frm.set_query('isr_account_payable', 'tax_witholding_ranges', () => {
@@ -177,16 +193,16 @@ frappe.ui.form.on("Company", {
 // es-GT: descripciones campos de direcciones en español
 frappe.ui.form.on("Address", {
     refresh: function (frm) {
-        frm.set_df_property("address_line1", "description", __("<b>* FEL: Direccion Comercial 1</b>"));
-        frm.set_df_property("city", "description", __("<b>FEL: Ciudad</b>  p. ej.: Antigua Guatemala"));
-        frm.set_df_property("state", "description", __("<b>FEL: Departamento</b>  p. ej.: Sacatepéquez"));
+        frm.set_df_property("address_line1", "description", __("<b>* Direccion Comercial 1</b>"));
+        frm.set_df_property("city", "description", __("<b>Ciudad</b>  p. ej.: Antigua Guatemala"));
+        frm.set_df_property("state", "description", __("<b>Departamento</b>  p. ej.: Sacatepéquez"));
         frm.set_df_property("county", "description", __("<b>Municipio</b>  p. ej.: Antigua Guatemala"));
 
-        frm.set_df_property("country", "description", __("<b>FEL: Pais</b>  p. ej: Guatemala"));
-        frm.set_df_property("email_id", "description", __("<b>FEL: Correo Electronico</b>  p. ej: micorreo@hola.com"));
+        frm.set_df_property("country", "description", __("<b>Pais</b>  p. ej: Guatemala"));
+        frm.set_df_property("email_id", "description", __("<b>Correo Electronico</b>  p. ej: micorreo@hola.com"));
         frm.set_df_property("phone", "description", __("<b>Teléfono:</b>  p. ej: +502 2333-2516"));
-        frm.set_df_property("pincode", "description", __("<b>FEL: Código Postal</b>  p. ej.: 03001"));
-        frm.set_df_property("is_primary_address", "description", __("<b>FEL: Dirección para facturar</b>"));
+        frm.set_df_property("pincode", "description", __("<b>Código Postal</b>  p. ej.: 03001"));
+        frm.set_df_property("is_primary_address", "description", __("<b>Dirección para facturar</b>"));
     }
 });
 
