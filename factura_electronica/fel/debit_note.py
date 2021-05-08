@@ -651,9 +651,6 @@ class ElectronicDebitNote:
             alias = frappe.db.get_value('Configuracion Factura Electronica',
                                        {'name': self.__config_name}, 'alias')
 
-            anulacion = frappe.db.get_value('Configuracion Factura Electronica',
-                                           {'name': self.__config_name}, 'es_anulacion')
-
             self.__llave = frappe.db.get_value('Configuracion Factura Electronica',
                                               {'name': self.__config_name}, 'llave_pfx')
 
@@ -661,7 +658,7 @@ class ElectronicDebitNote:
                 "llave": self.__llave, # LLAVE
                 "archivo": str(self.__encoded_str),  # En base64
                 "alias":  alias, # USUARIO
-                "es_anulacion": anulacion # "N" si es certificacion y "S" si es anulacion
+                "es_anulacion": "N" # "N" si es certificacion y "S" si es anulacion
             }
 
             headers = {"content-type": "application/json"}

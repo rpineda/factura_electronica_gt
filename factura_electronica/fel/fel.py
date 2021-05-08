@@ -32,61 +32,6 @@ class ElectronicInvoice:
         self.__precision = get_currency_precision()
         self.__default_address = False
 
-    def df_build_invoice(self):
-        """
-        Valida las dependencias necesarias, para ser firmado y certificado por la SAT y finalmente generar factura electronica
-
-        Returns:
-            tuple: True/False, msj, msj
-        """
-
-        try:
-            # 1 Validamos la data antes de construir
-            status_validate = self.validate()
-
-            if status_validate[0] == True:
-                self.__base_peticion = {
-                # "usuario": "gjtrade",
-                "company_tax_id": "108238555",
-                    "es_anulacion": "N",
-                    "factura": {
-                        "serie": self.__naming_serie,
-                        "numero": "0001",
-                        "fecha": "2021-05-03",
-                        "cliente": {
-                            "codigo": "C-001",
-                            "nombre": "CONSUMIDOR FINAL",
-                            "direccion": "30 calle 9-46 zona 11",
-                            "nit": "CF",
-                            "email": "ricardo@digitalframe.ws"
-                        },
-                        "adenda": {
-                            "vendedor": "sa",
-                            "tipo_factura": "contado",
-                            "forma_pago": "CONTADO",
-                            "tipo": "contado",
-                            "dias_credito": "0"
-                        },
-                        "detalle": [
-                            {
-                                "codigo": "002",
-                                "descripcion": "Instalación FEL TEST",
-                                "tipo": "S",
-                                "cantidad": "1",
-                                "descuento": "0.00",
-                                "preciounitario": "5.00",
-                                "valor": "5.00"
-                            }
-                        ]
-                    }
-                }
-
-                return True, 'OK'
-            else:
-                return False, status_validate[1]
-        except Exception as e:
-            return False, str(frappe.get_traceback())
-
     def build_invoice(self):
         """
         Valida las dependencias necesarias, para construir XML desde un JSON
@@ -102,31 +47,22 @@ class ElectronicInvoice:
 
             if status_validate[0] == True:
                 # 2 - Asignacion y creacion base peticion para luego ser convertida a XML
+
+                data_fac = frappe.db.get_value('Sales Invoice', {'name': self.__invoice_code}, 'company')
+
+                nit_company = str(frappe.db.get_value('Company', {'name': self.dat_fac[0]['company']}, 'nit_face_company').replace('-', '')).upper()
+                
+                username = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'username')
+
+
+                factura = self.__d_general
+                factura['items'] = self.__d_items
+
                 self.__base_peticion = {
-                    # "usuario": "gjtrade",
-                    "company_tax_id": "108238555",
-                        "es_anulacion": "N",
-                        "factura": {
-                            "serie": self.__naming_serie,
-                            "numero": "0001",
-                            "fecha": "2021-05-03",
-                            "cliente": {
-                                "codigo": "C-001",
-                                "nombre": "CONSUMIDOR FINAL",
-                                "direccion": "30 calle 9-46 zona 11",
-                                "nit": "CF",
-                                "email": "ricardo@digitalframe.ws"
-                            },
-                            "adenda": {
-                                "vendedor": "sa",
-                                "tipo_factura": "contado",
-                                "forma_pago": "CONTADO",
-                                "tipo": "contado",
-                                "dias_credito": "0"
-                            },
-                            "detalle": self.__d_items
-                        }
-                    }
+                    "usuario": username,
+                    "company_tax_id": nit_company,
+                    "es_anulacion": "N",
+                    "factura": factura
 
                     # "dte:GTDocumento": {
                     #     "@xmlns:ds": "http://www.w3.org/2000/09/xmldsig#",  # Version 2
@@ -152,8 +88,9 @@ class ElectronicInvoice:
                 }
 
                 # USAR SOLO PARA DEBUG:
-                # with open('mi_factura.json', 'w') as f:
-                #     f.write(json.dumps(self.__base_peticion))
+                document = factura.get()
+                with open('mi_factura.json', 'w') as f:
+                    f.write(json.dumps(self.__base_peticion))
 
                 return True,'OK'
             else:
@@ -233,6 +170,8 @@ class ElectronicInvoice:
             #                                  'tipo_documento')
             # }
 
+            owner = frappe.db.get_value('Sales Invoice', {'name': self.__invoice_code}, 'owner')
+
             self.__d_general = {
                 "serie": self.__naming_serie,
                 "numero": self.__invoice_code.replace(self.__naming_serie+'-', ''),
@@ -240,8 +179,8 @@ class ElectronicInvoice:
                 "currency": frappe.db.get_value('Sales Invoice', {'name': self.__invoice_code}, 'currency'),
                 "cliente": self.__d_receptor,
                 "adenda": {
-                    "vendedor": "sa",
-                    "tipo_factura": frappe.db.get_value('Configuracion Series FEL', {'parent': self.__config_name, 'serie': self.__naming_serie}, 'tipo_documento'),
+                    "vendedor": owner,
+                    "tipo_factura": "contado",
                     "forma_pago": "CONTADO",
                     "tipo": "contado",
                     "dias_credito": "0"
@@ -709,9 +648,6 @@ class ElectronicInvoice:
             alias = str(frappe.db.get_value('Configuracion Factura Electronica',
                                        {'name': self.__config_name}, 'alias')).strip()
 
-            anulacion = str(frappe.db.get_value('Configuracion Factura Electronica',
-                                           {'name': self.__config_name}, 'es_anulacion')).strip()
-
             self.__llave = str(frappe.db.get_value('Configuracion Factura Electronica',
                                               {'name': self.__config_name}, 'llave_pfx')).strip()
 
@@ -720,7 +656,7 @@ class ElectronicInvoice:
                 "archivo": str(self.__encoded_str),  # En base64
                 # "codigo": codigo, # Número interno de cada transacción
                 "alias": alias, # USUARIO
-                "es_anulacion": anulacion # "N" si es certificacion y "S" si es anulacion
+                "es_anulacion": "N" # "N" si es certificacion y "S" si es anulacion
             }
 
             # DEBUGGING WRITE JSON PETITION TO SITES FOLDER
@@ -763,31 +699,29 @@ class ElectronicInvoice:
             data_fac = frappe.db.get_value('Sales Invoice', {'name': self.__invoice_code}, 'company')
             nit_company = str(frappe.db.get_value('Company', {'name': self.dat_fac[0]['company']}, 'nit_face_company').replace('-', '')).upper()
 
-            url = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'url_dte')
-            user = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'alias')
-            llave = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'llave_ws')
-            correo_copia = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'correo_copia')
-            ident = self.__invoice_code  # identificador
+            url_base = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'url_base')
+            path = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'url_dte')
 
-            req_dte = {
-                "nit_emisor": nit_company,
-                "correo_copia": correo_copia,  # "m.monroyc22@gmail.com",
-                "xml_dte": self.__encrypted
-            }
+            certificador = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'certificador')
+            
+            # username = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'username')
+            # password = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'password')
+
+            jwt_api = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'jwt_api')
+
+            correo_copia = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'correo_copia')
 
             headers = {
-                "content-type": "application/json",
-                "usuario": user,
-                "llave": llave,
-                "identificador": ident
+                "Content-Type": "application/json",
+                "Authorization": "Bearer "+jwt_api
             }
 
-            self.__response = requests.post(url, data=json.dumps(req_dte), headers=headers)
+            self.__response = requests.post(url_base+'/'+certificador+path, data=json.dumps(self.__base_peticion), headers=headers)
             self.__response_ok = json.loads((self.__response.content).decode('utf-8'))
 
             # DEBUGGING WRITE JSON RESPONSES TO SITES FOLDER
-            # with open('RESPONSE-FACTURA-FEL.json', 'w') as f:
-            #     f.write(json.dumps(self.__response_ok, indent=2))
+            with open('RESPONSE-FACTURA-FEL.json', 'w') as f:
+                f.write(json.dumps(self.__response_ok, indent=2))
 
             return True, 'OK'
 
@@ -804,7 +738,7 @@ class ElectronicInvoice:
 
         try:
             # Verifica que no existan errores
-            if self.__response_ok['resultado'] == True and self.__response_ok['cantidad_errores'] == 0:
+            if self.__response_ok['error'] == False:
                 # # Se encarga de guardar las respuestas de INFILE-SAT esto para llevar registro
                 self.__end_datetime = get_datetime()
                 status_saved = self.save_answers()
@@ -820,6 +754,7 @@ class ElectronicInvoice:
             else:
                 return False, {'status': 'ERROR', 'numero_errores': str(self.__response_ok['cantidad_errores']),
                                'detalles_errores': str(self.__response_ok['descripcion_errores'])}
+
         except Exception as e:
             return False, {'status': 'ERROR VALIDACION', 'numero_errores':1,
                            'detalles_errores': 'Error al tratar de validar la respuesta de INFILE-SAT: '+str(frappe.get_traceback())}
@@ -834,13 +769,23 @@ class ElectronicInvoice:
 
         try:
             if not frappe.db.exists('Envio FEL', {'name': self.__response_ok['uuid']}):
+                
+                # {
+                # "serie": "2F256B7D",
+                # "numero": 2647082817,
+                # "uuid": "2F256B7D-9DC7-4741-AC63-EE2E12FCD83B",
+                # "fecha_certificacion": "2021-05-03T11:49:19-06:00",
+                # "fecha_emision": "2021-05-03 11:49:19",
+                # "pdf": "http://fel.digitalframe.ws/fel/fact/gjtrade/2F256B7D-9DC7-4741-AC63-EE2E12FCD83B.pdf"
+                # }
+
                 resp_fel = frappe.new_doc("Envio FEL")
-                resp_fel.resultado = self.__response_ok['resultado']
+                resp_fel.resultado = True
                 resp_fel.status = 'Valid'
                 resp_fel.tipo_documento = 'Factura Electronica'
-                resp_fel.fecha = self.__response_ok['fecha']
-                resp_fel.origen = self.__response_ok['origen']
-                resp_fel.descripcion = self.__response_ok['descripcion']
+                resp_fel.fecha = self.__response_ok['fecha_certificacion']
+                resp_fel.origen = self.__response_ok['fecha_emision']
+                resp_fel.descripcion = self.__response_ok['message']
                 resp_fel.serie_factura_original = self.__invoice_code
                 # resp_fel.serie_para_factura = 'FACELEC-'+str(self.__response_ok['numero'])
                 resp_fel.serie_para_factura = str(self.__response_ok['serie']).replace('*', '')+str(self.__response_ok['numero'])
@@ -849,12 +794,13 @@ class ElectronicInvoice:
                     resp_fel.saldo = self.__response_ok['control_emision']['Saldo']
                     resp_fel.creditos = self.__response_ok['control_emision']['Creditos']
 
-                resp_fel.alertas = self.__response_ok['alertas_infile']
-                resp_fel.descripcion_alertas_infile = str(self.__response_ok['descripcion_alertas_infile'])
-                resp_fel.alertas_sat = self.__response_ok['alertas_sat']
-                resp_fel.descripcion_alertas_sat = str(self.__response_ok['descripcion_alertas_sat'])
-                resp_fel.cantidad_errores = self.__response_ok['cantidad_errores']
-                resp_fel.descripcion_errores = str(self.__response_ok['descripcion_errores'])
+                if "alertas_infile" in self.__response_ok:
+                    resp_fel.alertas = self.__response_ok['alertas_infile']
+                    resp_fel.descripcion_alertas_infile = str(self.__response_ok['descripcion_alertas_infile'])
+                    resp_fel.alertas_sat = self.__response_ok['alertas_sat']
+                    resp_fel.descripcion_alertas_sat = str(self.__response_ok['descripcion_alertas_sat'])
+                    resp_fel.cantidad_errores = self.__response_ok['cantidad_errores']
+                    resp_fel.descripcion_errores = str(self.__response_ok['descripcion_errores'])
 
                 if "informacion_adicional" in self.__response_ok:
                     resp_fel.informacion_adicional = self.__response_ok['informacion_adicional']
@@ -866,7 +812,8 @@ class ElectronicInvoice:
                 # Guarda el documento firmado encriptado en base64
                 # decodedBytes = str(self.__response_ok['xml_certificado']) # base64.b64decode(self.__response_ok['xml_certificado'])
                 # decodedStr = str(decodedBytes, "utf-8")
-                resp_fel.xml_certificado = str(self.__xml_string)  # json.dumps(self.__doc_firmado, indent=2) # decodedStr
+
+                # resp_fel.xml_certificado = str(self.__xml_string)  # json.dumps(self.__doc_firmado, indent=2) # decodedStr
                 resp_fel.enviado = str(self.__start_datetime)
                 resp_fel.recibido = str(self.__end_datetime)
 

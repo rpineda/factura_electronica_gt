@@ -707,9 +707,6 @@ class SalesExchangeInvoice:
             alias = str(frappe.db.get_value('Configuracion Factura Electronica',
                                        {'name': self.__config_name}, 'alias')).strip()
 
-            anulacion = str(frappe.db.get_value('Configuracion Factura Electronica',
-                                           {'name': self.__config_name}, 'es_anulacion')).strip()
-
             self.__llave = str(frappe.db.get_value('Configuracion Factura Electronica',
                                               {'name': self.__config_name}, 'llave_pfx')).strip()
 
@@ -718,7 +715,7 @@ class SalesExchangeInvoice:
                 "archivo": str(self.__encoded_str),  # En base64
                 # "codigo": codigo, # Número interno de cada transacción
                 "alias": alias, # USUARIO
-                "es_anulacion": anulacion # "N" si es certificacion y "S" si es anulacion
+                "es_anulacion": "N" # "N" si es certificacion y "S" si es anulacion
             }
 
             # DEBUGGING WRITE JSON PETITION TO SITES FOLDER

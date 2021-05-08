@@ -1,6 +1,31 @@
 // Copyright (c) 2017, Frappe and contributors
 // For license information, please see license.txt
 
+frappe.ui.form.on('Configuracion Factura Electronica', "update_jwt_api", function(frm) {
+    let row = frappe.get_doc(cdt, cdn);
+
+    params = {
+        "client_id": row.client_id,
+        "client_secret": row.client_secret,
+        "grant_type": "password",
+        "username": row.username,
+        "password": row.password
+    }
+
+    frappe.call({
+        method: "factura_electronica.factura_electronica.doctype.configuracion_factura_electronica.configuracion_factura_electronica.get_jwt_api",
+        args: {
+            params: params
+        },
+        callback: function (jwt) {
+            row.jwt_api = jwt
+            cur_frm.refresh_field('jwt_api')
+
+            refresh_field("jwt_api")
+        }
+    });
+});
+
 frappe.ui.form.on('Configuracion Factura Electronica', {
     // en-US # Upon form refresh
     // es-GT # Al refrescar el formulario
@@ -41,7 +66,6 @@ frappe.ui.form.on('Configuracion Factura Electronica', {
                 cur_frm.refresh_field('serie');
             }
         });
-
     }
 });
 

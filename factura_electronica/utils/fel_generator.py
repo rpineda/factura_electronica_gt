@@ -510,8 +510,6 @@ class FacturaElectronicaFEL:
                                          'codigo')
             alias = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.nombre_config},
                                         'alias')
-            anulacion = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.nombre_config},
-                                            'es_anulacion')
             llave = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.nombre_config},
                                         'llave_pfx')
             reqfel = {
@@ -519,7 +517,7 @@ class FacturaElectronicaFEL:
                 "archivo": str(encodata),  # En base64
                 # "codigo": codigo, # Número interno de cada transacción
                 "alias":  alias, # USUARIO
-                "es_anulacion": anulacion # "N" si es certificacion y "S" si es anulacion
+                "es_anulacion": "N" # "N" si es certificacion y "S" si es anulacion
             }
 
             headers = {"content-type": "application/json"}

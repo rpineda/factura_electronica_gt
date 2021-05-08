@@ -132,9 +132,6 @@ class CancelDocument:
             alias = str(frappe.db.get_value('Configuracion Factura Electronica',
                                        {'name': self.__config_name}, 'alias')).strip()
 
-            anulacion = str(frappe.db.get_value('Configuracion Factura Electronica',
-                                           {'name': self.__config_name}, 'es_anulacion')).strip()
-
             self.__llave = str(frappe.db.get_value('Configuracion Factura Electronica',
                                               {'name': self.__config_name}, 'llave_pfx')).strip()
 

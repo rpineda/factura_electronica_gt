@@ -5,9 +5,11 @@
 from __future__ import unicode_literals
 
 import frappe
+
 from frappe import _
 from frappe.model.document import Document
 
+import requests
 
 class ConfiguracionFacturaElectronica(Document):
     pass
@@ -59,3 +61,30 @@ def get_description_phrase_fel(frase_catalogo='', codigo_frase_hija=''):
 
     else:
         return '<code>Codigo No disponible, para la frase seleccionada</code>'
+
+@frappe.whitelist()
+def get_jwt_api(params):
+    
+    url = params.get('url')+'/oauth/v2/token'
+    client_id = params.get('client_id')
+    client_secret = params.get('client_secret')
+    username = params.get('username')
+    password = params.get('password')
+
+    payload = {
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "grant_type": "password",
+        "username": username,
+        "password": password
+    }
+
+    headers = {"Content-Type": "application/json"}
+
+    try:
+        response = requests.request("POST", url, json=payload, headers=headers)
+        xret = response.get('access_token')
+    except Exception as e:
+        xret = ""
+
+    return xret
