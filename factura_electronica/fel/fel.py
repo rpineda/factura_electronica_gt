@@ -285,11 +285,12 @@ class ElectronicInvoice:
                                                  fieldname=['address_line1', 'email_id', 'pincode', 'country',
                                                             'state', 'city', 'country'], as_dict=1)
 
+            nit = self.dat_fac[0]['tax_id'].replace('/', '').replace('-','')
             datos_default = {
                 'email': frappe.db.get_value('Configuracion Factura Electronica',  {'name': self.__config_name}, 'correo_copia'),
-                'codigo': str((self.dat_fac[0]['tax_id']).replace('/', '').replace('-', '')).upper(),  # NIT => CF
+                'codigo': str(nit).upper(),  # NIT => CF
                 'nombre': str(self.dat_fac[0]["customer_name"]),
-                'nit': str((self.dat_fac[0]['tax_id']).replace('/', '').replace('-', '')).upper(),  # NIT => CF
+                'nit': str(nit).upper(),  # NIT => CF
                 'direccion': 'Guatemala',
                 'postal_code': '01001',
                 'municipio': 'Guatemala',
