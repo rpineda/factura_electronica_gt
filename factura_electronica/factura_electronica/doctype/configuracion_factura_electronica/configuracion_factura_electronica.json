@@ -20,6 +20,7 @@
         "codigo_escenario_factura_exportacion",
         "tipo_frase_factura_exenta",
         "codigo_escenario_factura_exenta",
+        "series__section",
         "datos__section",
         "client_id",
         "client_secret",
@@ -152,11 +153,22 @@
             "hidden": 1,
             "label": "Codigo Escenario Factura Exenta"
         },
+	    {
+	        "fieldname": "series__section",
+            "fieldtype": "Section Break",
+            "label": "Series"
+    	},
+        {
+            "fieldname": "series_fel_v2",
+            "fieldtype": "Table",
+            "label": "Series FEL V2",
+            "options": "Configuracion Series FEL"
+        },
         {
             "collapsible": 1,
             "fieldname": "datos__section",
             "fieldtype": "Section Break",
-            "label": "DATOS "
+            "label": "Parametros FEL"
         },
         {
             "description": "",
