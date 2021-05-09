@@ -253,7 +253,7 @@ class ElectronicInvoice:
                                                      {'name': self.__config_name}, 'afiliacion_iva'),
                 "codigo_establecimiento": dat_direccion[0]['facelec_establishment'],
                 "correo_emisor": dat_direccion[0]['email_id'],
-                "nit_emisor": str((dat_compania[0]['nit_face_company']).replace('-', '')).upper(),
+                "nit_emisor": str((dat_compania[0]['tax_id']).replace('-', '')).upper(),
                 "nombre_comercial": nom_comercial,
                 "nombre_emisor": nom_comercial,
                 "direccion_emisor": {
