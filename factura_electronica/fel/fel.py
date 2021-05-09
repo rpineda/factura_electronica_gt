@@ -107,12 +107,6 @@ class ElectronicInvoice:
             tuple: True/False, msj, msj
         """
 
-        # Validacion y generacion seccion datos generales
-        status_data_gen = self.general_data()
-        if status_data_gen[0] == False:
-            # Si existe algun error se retornara una tupla
-            return status_data_gen
-
         # Validacion y generacion seccion emisor
         status_sender = self.sender()
         if status_sender[0] == False:
@@ -138,6 +132,12 @@ class ElectronicInvoice:
         status_totals = self.totals()
         if status_totals[0] == False:
             return status_totals
+
+        # Validacion y generacion seccion datos generales
+        status_data_gen = self.general_data()
+        if status_data_gen[0] == False:
+            # Si existe algun error se retornara una tupla
+            return status_data_gen
 
         # Si todo va bien, retorna True
         return True, 'OK'
@@ -769,7 +769,7 @@ class ElectronicInvoice:
 
         try:
             if not frappe.db.exists('Envio FEL', {'name': self.__response_ok['uuid']}):
-                
+
                 # {
                 # "serie": "2F256B7D",
                 # "numero": 2647082817,
