@@ -214,8 +214,7 @@ class ElectronicInvoice:
 
             # Obtenemos datos necesario de company: Nombre de compañia, nit
             dat_compania = frappe.db.get_values('Company', filters={'name': self.dat_fac[0]['company']},
-                                                fieldname=['company_name', 'nit_face_company', 'tax_id',
-                                                           'facelec_trade_name'], as_dict=1)
+                                                fieldname=['company_name', 'tax_id', 'facelec_trade_name'], as_dict=1)
             if len(dat_compania) == 0:
                 return False, f'''No se encontraron datos para la compañia {self.dat_fac[0]["company_name"]}.
                                   Verifica que la factura que deseas procesar tenga una compañia valida'''
