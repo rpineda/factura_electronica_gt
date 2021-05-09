@@ -50,13 +50,13 @@ class ElectronicInvoice:
 
                 data_fac = frappe.db.get_value('Sales Invoice', {'name': self.__invoice_code}, 'company')
 
-                nit_company = str(frappe.db.get_value('Company', {'name': self.dat_fac[0]['company']}, 'nit_face_company').replace('-', '')).upper()
+                nit_company = str(frappe.db.get_value('Company', {'name': self.dat_fac[0]['company']}, 'tax_id').replace('-', '')).upper()
                 
                 username = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'username')
 
 
                 factura = self.__d_general
-                factura['items'] = self.__d_items
+                factura['detalle'] = self.__d_items
 
                 self.__base_peticion = {
                     "usuario": username,
@@ -88,8 +88,9 @@ class ElectronicInvoice:
                 }
 
                 # USAR SOLO PARA DEBUG:
-                document = factura.get()
-                with open('mi_factura.json', 'w') as f:
+                # document = factura.get()
+
+                with open(self.__invoice_code+'.json', 'w') as f:
                     f.write(json.dumps(self.__base_peticion))
 
                 return True,'OK'
@@ -119,9 +120,9 @@ class ElectronicInvoice:
             return status_receiver
 
         # Validacion y generacion seccion frases
-        status_phrases = self.phrases()
-        if status_phrases[0] == False:
-            return status_phrases
+        #status_phrases = self.phrases()
+        #if status_phrases[0] == False:
+        #    return status_phrases
 
         # Validacion y generacion seccion items
         status_items = self.items()
@@ -175,7 +176,7 @@ class ElectronicInvoice:
             self.__d_general = {
                 "serie": self.__naming_serie,
                 "numero": self.__invoice_code.replace(self.__naming_serie+'-', ''),
-                "fecha": date_invoice_inv,
+                "fecha": str(date_invoice_inv),
                 "currency": frappe.db.get_value('Sales Invoice', {'name': self.__invoice_code}, 'currency'),
                 "cliente": self.__d_receptor,
                 "adenda": {
@@ -285,7 +286,7 @@ class ElectronicInvoice:
                                                  fieldname=['address_line1', 'email_id', 'pincode', 'country',
                                                             'state', 'city', 'country'], as_dict=1)
 
-            nit = self.dat_fac[0]['tax_id'].replace('/', '').replace('-','')
+            nit = self.dat_fac[0]['customer_tax_id'].replace('/', '').replace('-','')
             datos_default = {
                 'email': frappe.db.get_value('Configuracion Factura Electronica',  {'name': self.__config_name}, 'correo_copia'),
                 'codigo': str(nit).upper(),  # NIT => CF
@@ -446,13 +447,15 @@ class ElectronicInvoice:
 
                         contador += 1
                         description_to_item = self.__dat_items[i]['item_name'] if switch_item_description == "Nombre de Item" else self.__dat_items[i]['description']
+                        code_to_item = self.__dat_items[i]['item_code']
 
                         obj_item["linea"] = contador
                         obj_item["cantidad"] = float(self.__dat_items[i]['qty'])
                         obj_item["unidad_medida"] = self.__dat_items[i]['facelec_three_digit_uom_code']
                         obj_item["descripcion"] = description_to_item  # description
-                        obj_item["precio_unitario"] = flt(precio_uni, self.__precision)
-                        obj_item["precio"] = flt(precio_item, self.__precision) # Correcto según el esquema XML
+                        obj_item["codigo"] = code_to_item
+                        obj_item["preciounitario"] = flt(precio_uni, self.__precision)
+                        obj_item["valor"] = flt(precio_item, self.__precision) # Correcto según el esquema XML
                         obj_item["descuento"] = flt(desc_fila, self.__precision)
 
                         # Agregamos los impuestos
@@ -500,13 +503,15 @@ class ElectronicInvoice:
 
                         contador += 1
                         description_to_item = self.__dat_items[i]['item_name'] if switch_item_description == "Nombre de Item" else self.__dat_items[i]['description']
+                        code_to_item = self.__dat_items[i]['item_code']
 
                         obj_item["linea"] = contador
                         obj_item["cantidad"] = float(self.__dat_items[i]['qty'])
                         obj_item["unidad_medida"] = self.__dat_items[i]['facelec_three_digit_uom_code']
                         obj_item["descripcion"] = description_to_item  # description
-                        obj_item["precio_unitario"] = flt(precio_uni, self.__precision)
-                        obj_item["precio"] = flt(precio_item, self.__precision) # Correcto según el esquema XML
+                        obj_item["codigo"] = code_to_item
+                        obj_item["preciounitario"] = flt(precio_uni, self.__precision)
+                        obj_item["valor"] = flt(precio_item, self.__precision) # Correcto según el esquema XML
                         obj_item["descuento"] = flt(desc_fila, self.__precision)
 
                         # Agregamos los impuestos
@@ -547,8 +552,8 @@ class ElectronicInvoice:
 
                     items_ok.append(obj_item)
 
-            i_fel = {"item": items_ok}
-            self.__d_items = i_fel
+            #i_fel = {"item": items_ok}
+            self.__d_items = items_ok
 
             return True, 'OK'
 
@@ -697,7 +702,7 @@ class ElectronicInvoice:
 
         try:
             data_fac = frappe.db.get_value('Sales Invoice', {'name': self.__invoice_code}, 'company')
-            nit_company = str(frappe.db.get_value('Company', {'name': self.dat_fac[0]['company']}, 'nit_face_company').replace('-', '')).upper()
+            nit_company = str(frappe.db.get_value('Company', {'name': self.dat_fac[0]['company']}, 'tax_id').replace('-', '')).upper()
 
             url_base = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'url_base')
             path = frappe.db.get_value('Configuracion Factura Electronica', {'name': self.__config_name}, 'url_dte')
@@ -716,7 +721,7 @@ class ElectronicInvoice:
                 "Authorization": "Bearer "+jwt_api
             }
 
-            self.__response = requests.post(url_base+'/'+certificador+path, data=json.dumps(self.__base_peticion), headers=headers)
+            self.__response = requests.post(url_base+'/'+str(certificador).lower()+path, data=json.dumps(self.__base_peticion), headers=headers)
             self.__response_ok = json.loads((self.__response.content).decode('utf-8'))
 
             # DEBUGGING WRITE JSON RESPONSES TO SITES FOLDER
@@ -752,8 +757,7 @@ class ElectronicInvoice:
                               'serie': self.__response_ok['serie'], 'numero': self.__response_ok['numero']}
 
             else:
-                return False, {'status': 'ERROR', 'numero_errores': str(self.__response_ok['cantidad_errores']),
-                               'detalles_errores': str(self.__response_ok['descripcion_errores'])}
+                return False, {'status': 'ERROR', 'detalles_errores': json.dumps(self.__response_ok)}
 
         except Exception as e:
             return False, {'status': 'ERROR VALIDACION', 'numero_errores':1,

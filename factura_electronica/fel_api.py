@@ -177,10 +177,10 @@ def generate_electronic_invoice(invoice_code, naming_series):
 
         # PASO 4: FIRMA CERTIFICADA Y ENCRIPTADA
         # En este paso se convierte de JSON a XML y se codifica en base64
-        status_firma = new_invoice.sign_invoice()
-        if status_firma[0] == False:  # Si no se firma correctamente
-            return False, f'Ocurrio un problema al tratar de firmar la petición, vericar tener la url correcta para \
-                firmas en Configuracion Factura Electroónica mas detalle en: {status_firma[1]}'
+        #status_firma = new_invoice.sign_invoice()
+        #if status_firma[0] == False:  # Si no se firma correctamente
+        #    return False, f'Ocurrio un problema al tratar de firmar la petición, vericar tener la url correcta para \
+        #        firmas en Configuracion Factura Electroónica mas detalle en: {status_firma[1]}'
 
         # PASO 5: SOLICITAMOS FACTURA ELECTRONICA
         status_facelec = new_invoice.request_electronic_invoice()
@@ -1085,11 +1085,11 @@ def generate_exchange_invoice_si(invoice_code: str, naming_series: str) -> tuple
 
         # Firma certificacion
         # # En este paso se convierte de JSON a XML y se codifica en base64
-        status_firma = new_exch_inv.sign_invoice()
-        if status_firma[0] == False:  # Si no se firma correctamente
-            frappe.msgprint(msg=_(f'No se pudo generar la certificacion de la peticion para generar documento electronico, mas detalles en: {status_firma[1]}'),
-                            title=_('<b>Factura Cambiaria</b>: Proceso no completado'), indicator='red')
-            return False, f'Ocurrio un problema en el proceso, mas detalle en: {status_firma[1]}'
+        #status_firma = new_exch_inv.sign_invoice()
+        #if status_firma[0] == False:  # Si no se firma correctamente
+        #    frappe.msgprint(msg=_(f'No se pudo generar la certificacion de la peticion para generar documento electronico, mas detalles en: {status_firma[1]}'),
+        #                    title=_('<b>Factura Cambiaria</b>: Proceso no completado'), indicator='red')
+        #    return False, f'Ocurrio un problema en el proceso, mas detalle en: {status_firma[1]}'
 
         # Solicitud generacion Doc Electronico
         status_facelec = new_exch_inv.request_electronic_invoice()
