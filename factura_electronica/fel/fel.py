@@ -222,7 +222,7 @@ class ElectronicInvoice:
 
             # De la compañia, obtenemos direccion 1, email, codigo postal, departamento, municipio, pais
             dat_direccion = frappe.db.get_values('Address', filters={'name': self.dat_fac[0]['company_address']},
-                                                 fieldname=['address_line1', 'email_id', 'pincode', 'county',
+                                                 fieldname=['address_line1', 'email_id', 'pincode', 'country',
                                                             'state', 'city', 'country', 'facelec_establishment'],
                                                  as_dict=1)
             if len(dat_direccion) == 0:
@@ -259,7 +259,7 @@ class ElectronicInvoice:
                 "direccion_emisor": {
                     "direccion": dat_direccion[0]['address_line1'],
                     "codigoPostal": dat_direccion[0]['pincode'],  # Codig postal
-                    "municipio": dat_direccion[0]['county'],  # Municipio
+                    "municipio": dat_direccion[0]['country'],  # Municipio
                     "departamento": dat_direccion[0]['state'],  # Departamento
                     "pais": frappe.db.get_value('Country', {'name': dat_direccion[0]['country']}, 'code').upper()  # CODIG PAIS
                 }
@@ -282,7 +282,7 @@ class ElectronicInvoice:
         # Intentara obtener data de direccion cliente
         try:
             dat_direccion = frappe.db.get_values('Address', filters={'name': self.dat_fac[0]['customer_address']},
-                                                 fieldname=['address_line1', 'email_id', 'pincode', 'county',
+                                                 fieldname=['address_line1', 'email_id', 'pincode', 'country',
                                                             'state', 'city', 'country'], as_dict=1)
 
             datos_default = {
@@ -315,7 +315,7 @@ class ElectronicInvoice:
                     'nit': datos_default.get('nit'),
                     'direccion': dat_direccion[0].get('address_line1', datos_default.get('address')),
                     'postal_code': dat_direccion[0].get('pincode', datos_default.get('pincode')),
-                    'municipio': dat_direccion[0].get('county', datos_default.get('municipio')),
+                    'municipio': dat_direccion[0].get('country', datos_default.get('municipio')),
                     'departamento': dat_direccion[0].get('state', datos_default.get('departamento')),
                     'pais': frappe.db.get_value('Country', {'name': dat_direccion[0]['country']}, 'code').upper() or 'GT'
                 }
