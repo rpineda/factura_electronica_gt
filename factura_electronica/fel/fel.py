@@ -701,6 +701,8 @@ class ElectronicInvoice:
         """
 
         try:
+            self.__start_datetime = get_datetime()
+
             data_fac = frappe.db.get_value('Sales Invoice', {'name': self.__invoice_code}, 'company')
             nit_company = str(frappe.db.get_value('Company', {'name': self.dat_fac[0]['company']}, 'tax_id').replace('-', '')).upper()
 
@@ -743,15 +745,22 @@ class ElectronicInvoice:
 
         try:
             # Verifica que no existan errores
+            #return False, { 'status': 'ERROR', 'detalles_errores': int(self.__response_ok['error'] == False) }
+
             if self.__response_ok['error'] == False:
                 # # Se encarga de guardar las respuestas de INFILE-SAT esto para llevar registro
                 self.__end_datetime = get_datetime()
-                status_saved = self.save_answers()
+
+                #return False, { 'status': 'ERROR', 'detalles_errores': 'Estoy por grabar' }
+
+                status_saved = self.save_answers() 
+                
+                #return False, { 'status': 'ERROR', 'detalles_errores': status_saved }
 
                 # Al primer error encontrado retornara un detalle con el mismo
                 if status_saved == False:
-                    return False, status_saved
-                    # return {'status': 'ERROR', 'detalles_errores': status_saved, 'numero_errores':1}
+                    #return False, status_saved
+                    return {'status': 'ERROR', 'detalles_errores': status_saved, 'numero_errores':1}
 
                 return True, {'status': 'OK', 'numero_autorizacion': self.__response_ok['uuid'],
                               'serie': self.__response_ok['serie'], 'numero': self.__response_ok['numero']}
@@ -770,9 +779,13 @@ class ElectronicInvoice:
         Returns:
             tuple: True/False, msj, msj
         """
+        
+        #return False, json.dumps(self.__response_ok)
 
         try:
-            if not frappe.db.exists('Envio FEL', {'name': self.__response_ok['uuid']}):
+            if not frappe.db.exists('Envio FEL', {'name': self.__response_ok.get('uuid')}):
+
+                frappe.msgprint('Factura no existe se creara')
 
                 # {
                 # "serie": "2F256B7D",
@@ -783,16 +796,20 @@ class ElectronicInvoice:
                 # "pdf": "http://fel.digitalframe.ws/fel/fact/gjtrade/2F256B7D-9DC7-4741-AC63-EE2E12FCD83B.pdf"
                 # }
 
+                #return False, 'Ya casi '+self.__response_ok.get('uuid')
+
                 resp_fel = frappe.new_doc("Envio FEL")
                 resp_fel.resultado = True
                 resp_fel.status = 'Valid'
                 resp_fel.tipo_documento = 'Factura Electronica'
-                resp_fel.fecha = self.__response_ok['fecha_certificacion']
-                resp_fel.origen = self.__response_ok['fecha_emision']
-                resp_fel.descripcion = self.__response_ok['message']
+                resp_fel.fecha = self.__response_ok.get('fecha_certificacion')
+                resp_fel.origen = self.__response_ok.get('fecha_emision')
+                resp_fel.descripcion = self.__response_ok.get('message')
                 resp_fel.serie_factura_original = self.__invoice_code
                 # resp_fel.serie_para_factura = 'FACELEC-'+str(self.__response_ok['numero'])
-                resp_fel.serie_para_factura = str(self.__response_ok['serie']).replace('*', '')+str(self.__response_ok['numero'])
+                resp_fel.serie_para_factura = str(self.__response_ok.get('serie')).replace('*', '')+str(self.__response_ok.get('numero'))
+
+                #response_ok = json.loads(self.__)
 
                 if "control_emision" in self.__response_ok:
                     resp_fel.saldo = self.__response_ok['control_emision']['Saldo']
@@ -803,15 +820,15 @@ class ElectronicInvoice:
                     resp_fel.descripcion_alertas_infile = str(self.__response_ok['descripcion_alertas_infile'])
                     resp_fel.alertas_sat = self.__response_ok['alertas_sat']
                     resp_fel.descripcion_alertas_sat = str(self.__response_ok['descripcion_alertas_sat'])
-                    resp_fel.cantidad_errores = self.__response_ok['cantidad_errores']
+                    esp_fel.cantidad_errores = self.__response_ok['cantidad_errores']
                     resp_fel.descripcion_errores = str(self.__response_ok['descripcion_errores'])
 
                 if "informacion_adicional" in self.__response_ok:
                     resp_fel.informacion_adicional = self.__response_ok['informacion_adicional']
 
-                resp_fel.uuid = self.__response_ok['uuid']
-                resp_fel.serie = self.__response_ok['serie']
-                resp_fel.numero = self.__response_ok['numero']
+                resp_fel.uuid = self.__response_ok.get('uuid')
+                resp_fel.serie = self.__response_ok.get('serie')
+                resp_fel.numero = self.__response_ok.get('numero')
 
                 # Guarda el documento firmado encriptado en base64
                 # decodedBytes = str(self.__response_ok['xml_certificado']) # base64.b64decode(self.__response_ok['xml_certificado'])
@@ -823,10 +840,12 @@ class ElectronicInvoice:
 
                 resp_fel.save(ignore_permissions=True)
 
+                frappe.msgprint('Al parecer la factura fue creada en Envios FEL')
+
             return True, 'OK'
 
         except Exception as e:
-            return False, f'Error al tratar de guardar la rspuesta, para la factura {self.__invoice_code}, \
+            return False, f'Error al tratar de guardar la respuesta, para la factura {self.__invoice_code}, \
                             Mas detalles en {str(frappe.get_traceback())}'
 
     def upgrade_records(self):
@@ -836,13 +855,20 @@ class ElectronicInvoice:
 
         Returns:
             tuple: True/False, msj, msj
-        """
+        """  
+
 
         # Verifica que exista un documento en la tabla Envio FEL con el nombre de la serie original
         if frappe.db.exists('Envio FEL', {'serie_factura_original': self.__invoice_code}):
             factura_guardada = frappe.db.get_values('Envio FEL',
                                                     filters={'serie_factura_original': self.__invoice_code},
-                                                    fieldname=['numero', 'serie', 'uuid'], as_dict=1)
+                                                    fieldname=['numero', 'serie', 'uuid'])
+            
+            #return True, numero+' '+serie+' '+uuid
+
+            frappe.msgprint(factura_guardada[0]['numero'])
+
+
             # Esta seccion se encarga de actualizar la serie, con una nueva que es serie y numero
             # buscara en las tablas donde exista una coincidencia actualizando con la nueva serie
             serie_sat = str(factura_guardada[0]['serie']).replace('*', '')  # Se sustituye el * tomando en cuenta el server de pruebas FEL
@@ -984,6 +1010,8 @@ class ElectronicInvoice:
 
                 frappe.db.commit()
 
+                return True, factura_guardada[0]['uuid']
+
             except Exception as e:
                 # En caso exista un error al renombrar la factura retornara el mensaje con el error
                 return False, f'Error al renombrar Factura. Por favor intente de nuevo presionando el boton Factura Electronica \
@@ -993,7 +1021,10 @@ class ElectronicInvoice:
                 # Si los datos se Guardan correctamente, se retornara la serie, que sera capturado por api.py
                 # para luego ser capturado por javascript, se utilizara para recargar la url con los cambios correctos
                 if self.__default_address:
+                    #factura_guardada = frappe.db.get_values('Envio FEL',filters={'serie_factura_original': self.__invoice_code}, fieldname=['numero', 'serie', 'uuid'], as_dict=1)
+
                     frappe.msgprint(_(f'Factura generada exitosamente, sin embargo se sugiere configurar correctamente la dirección del cliente, \
                         porque se usaron datos default. Haga clic <a href="#List/Address/List"><b>Aquí</b></a> para configurarlo de una vez.'))
-                # Se utilizara el UUID como clave para orquestar el resto de las apps que lo necesiten
-                return True, factura_guardada[0]['uuid']
+                    # Se utilizara el UUID como clave para orquestar el resto de las apps que lo necesiten
+                    return True, '88888'
+

@@ -191,6 +191,10 @@ def generate_electronic_invoice(invoice_code, naming_series):
         # Las respuestas en este paso no son de gran importancia ya que las respuestas ok, seran guardadas
         # automaticamente si todo va bien, aqui se retornara cualquier error que ocurra en la fase
         status_res = new_invoice.response_validator()
+        #msgprint(status_res)
+
+        return status_res
+
         if (status_res[1]['status'] == 'ERROR') or (status_res[1]['status'] == 'ERROR VALIDACION'):
             return status_res  # return tuple
 
